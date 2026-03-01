@@ -9,6 +9,7 @@
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        /* Thêm Google Font Nunito */
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
         
         :root { --blue: #0054a6; --cyan: #00d4ff; }
@@ -30,10 +31,36 @@
         input:focus, select:focus { border-color: var(--blue); outline: none; box-shadow: 0 0 0 3px rgba(0,84,166,0.1); background: #fff;}
         select { color: var(--blue); cursor: pointer; }
         
-        .btn-spin { background: linear-gradient(135deg, #11998e, #38ef7d); color: white; border: none; padding: 15px; width: 100%; border-radius: 12px; font-weight: 800; cursor: pointer; font-size: 18px; transition: all 0.3s; margin-top: 15px; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 5px 15px rgba(56,239,125,0.4);}
-        .btn-spin:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(56,239,125,0.6); }
+        /* CSS cho các nút chính (Quay ngay, Đăng ký) */
+        .btn-spin { 
+            background: linear-gradient(135deg, #007bff, #0056b3); /* Màu xanh lam nhất quán */
+            color: white; 
+            border: none; 
+            padding: 15px; 
+            width: 100%; 
+            border-radius: 12px; 
+            font-weight: 800; 
+            cursor: pointer; 
+            font-size: 18px; 
+            transition: all 0.3s; 
+            margin-top: 15px; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4);
+            display: flex; /* Dùng flexbox để căn chỉnh icon và chữ */
+            align-items: center; 
+            justify-content: center; 
+            gap: 10px; 
+            white-space: nowrap; /* Chống ngắt dòng */
+        }
+        .btn-spin i { font-size: 20px; } /* Kích thước icon chuẩn */
+        .btn-spin:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0, 123, 255, 0.6); }
         .btn-spin:disabled { background: #6c757d; cursor: not-allowed; box-shadow: none; transform: none; }
         
+        /* CSS riêng cho nút Quay Ngay bên trong (màu xanh lá) */
+        #spin-btn { background: linear-gradient(135deg, #11998e, #38ef7d); box-shadow: 0 5px 15px rgba(56,239,125,0.4); }
+        #spin-btn:hover { box-shadow: 0 8px 20px rgba(56,239,125,0.6); }
+
         .btn-exit-small { position: absolute; top: 15px; right: 15px; background: #ffebee; color: #dc3545; border: 1px solid #ffc107; padding: 6px 12px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 13px; z-index: 100; transition: 0.3s;}
         .btn-exit-small:hover { background: #dc3545; color: white; border-color: #dc3545; }
         
@@ -90,7 +117,7 @@
             
             <input type="text" id="name" placeholder="Họ và tên (*)">
             <input type="text" id="school" placeholder="Trường THPT (*)">
-            <button class="btn-spin" style="background: linear-gradient(135deg, #0054a6, #00a8ff);" onclick="handleAuth()"><i class="fas fa-sign-in-alt"></i> ĐĂNG KÝ QUAY THƯỞNG</button>
+            <button class="btn-spin" onclick="handleAuth()"><i class="fas fa-sign-in-alt"></i> ĐĂNG KÝ QUAY THƯỞNG</button>
         </div>
 
         <div id="game-box" style="display:none">
@@ -104,7 +131,7 @@
                 <b>LÀM NHIỆM VỤ ĐỂ NHẬN THÊM LƯỢT QUAY!</b><br>
                 <small id="mission-text-display">(Nhấn vào đây để thực hiện)</small>
             </div>
-
+            
             <button id="spin-btn" class="btn-spin" onclick="startSpin()"><i class="fas fa-play"></i> QUAY NGAY</button>
             <div id="user-history-bottom"></div>
         </div>
@@ -238,7 +265,7 @@
         
         if (!loc) { if (locSelect.options.length <= 1 && locSelect.options[0].text.includes("chưa có trạm")) return Swal.fire("Thông báo", "Hiện chưa có Trạm mở. Vui lòng quay lại sau!", "warning"); return Swal.fire("Lỗi", "Vui lòng CHỌN ĐỊA ĐIỂM!", "error"); }
         
-        // 🔥 LỚP KHÓA SỐ 2: KIỂM TRA ĐỊNH DẠNG ĐẦU SỐ KHI BẤM NÚT 🔥
+        // LỚP KHÓA SỐ 2: KIỂM TRA ĐỊNH DẠNG ĐẦU SỐ KHI BẤM NÚT
         const phoneRegex = /^(03|05|07|08|09)[0-9]{8}$/;
         if (!phoneRegex.test(ph)) {
             return Swal.fire("Lỗi Xác Thực", "Số điện thoại không hợp lệ!<br>Vui lòng nhập đúng số thật có 10 chữ số (Ví dụ: <b>09</b>xxxx, <b>03</b>xxxx...)", "error");
