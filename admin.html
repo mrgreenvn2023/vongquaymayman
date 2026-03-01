@@ -90,15 +90,15 @@
     <div class="tabs">
         <button type="button" class="tab-btn active" onclick="openTab('tab-config', this)"><i class="fas fa-sliders-h"></i> Cấu hình Trạm</button>
         <button type="button" class="tab-btn" onclick="openTab('tab-history', this)"><i class="fas fa-users"></i> Quản Lý Thí Sinh</button>
-        <button type="button" class="tab-btn" onclick="openTab('tab-report', this)"><i class="fas fa-chart-bar"></i> Thống kê (Chốt sổ)</button>
-        <button type="button" class="tab-btn" onclick="openTab('tab-data', this)"><i class="fas fa-list-alt"></i> Dữ liệu Sheet</button>
+        <button type="button" class="tab-btn" onclick="openTab('tab-report', this)"><i class="fas fa-chart-bar"></i> Thống kê (Đã Chốt sổ)</button>
+        <button type="button" class="tab-btn" onclick="openTab('tab-data', this)"><i class="fas fa-list-alt"></i> DS Sinh viên tham gia </button>
         <button type="button" class="tab-btn" id="tab-btn-acc" style="display:none;" onclick="openTab('tab-accounts', this)"><i class="fas fa-users-cog"></i> Tài khoản</button>
         <button type="button" class="tab-btn" id="tab-btn-sys" style="display:none;" onclick="openTab('tab-system', this)"><i class="fas fa-cogs"></i> Cài Đặt Hệ Thống</button>
     </div>
 
     <div id="tab-config" class="tab-content active">
         <div id="super-station-list-box" style="background:#fff; border: 1px solid #e1e8ed; padding:20px; border-radius:15px; margin-bottom: 20px; border-left: 5px solid #11998e; display: none;">
-            <label style="font-weight:800; color:#11998e; font-size:15px;"><i class="fas fa-database"></i> KHO TRẠM ĐÃ LƯU:</label>
+            <label style="font-weight:800; color:#11998e; font-size:15px;"><i class="fas fa-database"></i> KHO ĐÃ LƯU:</label>
             <select id="super-saved-stations" onchange="loadStationByName(this.value)" style="border: 1px solid #ced4da; padding:12px; width:100%; border-radius:8px; font-weight:700; background:#f8f9fa; outline:none; margin-top:10px; font-family: 'Nunito', sans-serif;"></select>
         </div>
         
@@ -111,23 +111,23 @@
                 </div>
                 
                 <div style="border: 1px solid #ced4da; border-radius: 8px; padding: 15px; background: #fff; min-width: 300px;">
-                    <div style="font-weight: 800; color: #0054a6; font-size: 13px; text-transform: uppercase; margin-bottom: 12px;"><i class="fas fa-calculator"></i> CHỌN PHƯƠNG THỨC TÍNH:</div>
+                    <div style="font-weight: 800; color: #0054a6; font-size: 13px; text-transform: uppercase; margin-bottom: 12px;"><i class="fas fa-calculator"></i> CHỌN PHƯƠNG THỨC TÍNH TRÚNG THƯỞNG:</div>
                     <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 15px;">
                         <label style="display: flex; align-items: center; gap: 5px; cursor: pointer; font-size: 14px; font-weight: bold; width: 100px; color:#e84393;">
-                            <input type="radio" name="calcType" value="percent" checked onchange="window.toggleCalcType()"> Tỉ lệ (%)
+                            <input type="radio" name="calcType" value="percent" checked onchange="window.toggleCalcType()"> Trúng thưởng theo Tỉ lệ (%)
                         </label>
                         <select id="cfg-mode-percent" onchange="window.toggleMode()" style="flex: 1; padding: 8px; font-size: 13px; border-radius: 6px; margin:0;">
                             <option value="percent_manual">Chỉnh tay</option>
-                            <option value="percent_auto">Tự động (Máy tự chia %)</option>
+                            <option value="percent_auto">Tự động (Máy tự tính %)</option>
                         </select>
                     </div>
                     <div style="display: flex; gap: 10px; align-items: center;">
                         <label style="display: flex; align-items: center; gap: 5px; cursor: pointer; font-size: 14px; font-weight: bold; width: 100px; color:#0054a6;">
-                            <input type="radio" name="calcType" value="multiplier" onchange="window.toggleCalcType()"> Bội số
+                            <input type="radio" name="calcType" value="multiplier" onchange="window.toggleCalcType()"> Tính theo Bội số - Đề xuất
                         </label>
                         <select id="cfg-mode-multiplier" onchange="window.toggleMode()" style="flex: 1; padding: 8px; font-size: 13px; border-radius: 6px; margin:0;" disabled style="background:#e9ecef;">
                             <option value="manual">Chỉnh tay</option>
-                            <option value="auto">Tự động (Máy tự tính)</option>
+                            <option value="auto">Tự động (Máy tự tính) - Đề xuất </option>
                         </select>
                     </div>
                 </div>
@@ -142,7 +142,7 @@
         <div style="font-weight: 800; display: flex; padding: 0 15px; color: #6c757d; margin-bottom: 10px; font-size:13px; text-transform: uppercase;">
             <div style="flex:1.5;">Tên Món Quà</div>
             <div style="flex:1.5; text-align:center;">Hình Ảnh</div>
-            <div style="flex:0.6; text-align:center;">SL Tồn</div>
+            <div style="flex:0.6; text-align:center;">QUÀ HIỆN CÓ</div>
             <div id="col-mul" style="flex:1; text-align:center; color:#0054a6; display: none;">Bội số</div>
             <div id="col-pct" style="flex:1; text-align:center; color:#e84393; display: block;">Tỉ lệ (%)</div>
             <div style="flex:0.3;"></div>
