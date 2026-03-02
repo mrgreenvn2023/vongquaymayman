@@ -23,14 +23,6 @@
         input, select { width: 100%; padding: 14px 15px; margin: 8px 0; border: 1px solid #ced4da; border-radius: 10px; box-sizing: border-box; font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 600; background: #f8f9fa;}
         input:focus, select:focus { border-color: var(--blue); outline: none; box-shadow: 0 0 0 3px rgba(0,84,166,0.1); background: #fff;}
         select { color: var(--blue); cursor: pointer; }
-        
-        /* AVATAR UPLOAD CSS */
-        .avatar-upload-box { display: flex; align-items: center; gap: 15px; background: #f8f9fa; padding: 10px; border-radius: 10px; border: 1px dashed #ced4da; margin: 8px 0; text-align: left; cursor: pointer; transition: 0.3s;}
-        .avatar-upload-box:hover { border-color: var(--blue); background: rgba(0,84,166,0.05); }
-        .avatar-preview { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1);}
-        .avatar-text { font-size: 13px; color: #555; font-weight: 700; line-height: 1.3;}
-        .avatar-text i { color: var(--blue); }
-
         .btn-spin { background: linear-gradient(135deg, #007bff, #0056b3); color: white; border: none; padding: 15px; width: 100%; border-radius: 12px; font-weight: 800; cursor: pointer; font-size: 18px; transition: all 0.3s; margin-top: 15px; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4); display: flex; align-items: center; justify-content: center; gap: 10px; white-space: nowrap; }
         .btn-spin i { font-size: 20px; }
         .btn-spin:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0, 123, 255, 0.6); }
@@ -54,14 +46,11 @@
         #wheel-wrapper { position: relative; width: 280px; height: 280px; margin: 15px auto; }
         canvas { width: 100%; height: 100%; border-radius: 50%; box-sizing: border-box; }
         #pointer { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 18px solid transparent; border-right: 18px solid transparent; border-top: 30px solid #dc3545; z-index: 100; filter: drop-shadow(0 3px 3px rgba(0,0,0,0.3));}
-        
         @keyframes prizeDance { 0% { transform: scale(0.8) translateY(0); } 25% { transform: scale(1.1) translateY(-10px) rotate(5deg); } 50% { transform: scale(1.0) translateY(0) rotate(-5deg); } 75% { transform: scale(1.1) translateY(-5px) rotate(3deg); } 100% { transform: scale(1) translateY(0) rotate(0); } }
         .dancing-prize { animation: prizeDance 1.5s ease-in-out infinite; filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.8)); max-width: 150px; margin: 20px auto; display: block; }
-        
         #prize-reveal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 100000; display: none; justify-content: center; align-items: center; flex-direction: column; }
         .reveal-img { width: 250px; animation: popAndFade 2.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; filter: drop-shadow(0 0 30px rgba(255,255,255,0.8)); }
         @keyframes popAndFade { 0% { transform: scale(0) rotate(-180deg); opacity: 0; } 30% { transform: scale(1.2) rotate(10deg); opacity: 1; } 50% { transform: scale(1) rotate(0deg); opacity: 1; } 80% { transform: scale(1.1); opacity: 1; filter: drop-shadow(0 0 50px rgba(255, 215, 0, 1)); } 100% { transform: scale(0.2); opacity: 0; } }
-
         .admin-link { margin-top: 20px; font-size: 13px; color: rgba(255,255,255,0.7); text-decoration: none; display: inline-block; transition: 0.3s; z-index: 9999; font-weight: 600; padding: 8px 15px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2);}
         .admin-link:hover { color: #fff; background: rgba(255,255,255,0.1); }
         .copyright-text { margin-top: 15px; font-size: 12px; color: rgba(255,255,255,0.5); z-index: 9999; text-align: center; letter-spacing: 0.5px;}
@@ -87,14 +76,6 @@
         
         <div id="auth-box">
             <select id="user-location" onchange="loadStationConfig()"><option value="">-- CHỌN ĐỊA ĐIỂM SỰ KIỆN (*) --</option></select>
-            
-            <div class="avatar-upload-box" onclick="document.getElementById('avatar-input').click()">
-                <img id="user-avatar-preview" src="upload/image/logotvu.png" class="avatar-preview">
-                <div class="avatar-text"><i class="fas fa-camera"></i> Tải lên ảnh đại diện<br><span style="font-weight:normal;font-size:11px;">(Sẽ dùng Logo TVU nếu bỏ trống)</span></div>
-            </div>
-            <input type="file" id="avatar-input" style="display:none" onchange="uploadAvatar(this)">
-            <input type="hidden" id="final-avatar-link" value="">
-
             <input type="tel" id="phone" placeholder="Số điện thoại cá nhân (*)" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, ''); if(this.value.length === 1 && this.value !== '0') this.value = '';">
             <input type="text" id="name" placeholder="Họ và tên (*)">
             <input type="email" id="email" placeholder="Email nhận thông báo (*)">
@@ -105,6 +86,9 @@
         <div id="game-box" style="display:none">
             <button class="btn-exit-small" onclick="logoutContestant()"><i class="fas fa-sign-out-alt"></i> Thoát ra</button>
             <div class="user-panel" id="user-profile-top"></div>
+            
+            <input type="file" id="avatar-input" style="display:none" accept="image/*" onchange="uploadAvatar(this)">
+
             <div id="wheel-wrapper"><div id="pointer"></div><canvas id="wheel"></canvas></div>
             <div id="user-turns-bottom" style="display:flex; justify-content:space-between; align-items:center; margin-top:10px; padding:10px; background:#fff; border-radius:10px; border:1px solid #dce1e6;"></div>
 
@@ -130,7 +114,6 @@
     const baseColors = ['#808285', '#0054a6', '#00d4ff', '#28a745', '#f39c12', '#9b59b6', '#e84393', '#ed1c24'];
     let isIdle = false; let idleReq; let afkTime = 0;
 
-    // AFK 10 PHÚT NGƯỜI CHƠI
     function resetAFK() { afkTime = 0; if(user && user.phone) localStorage.setItem("tvu_user_time", Date.now()); }
     window.addEventListener('mousemove', resetAFK); window.addEventListener('keypress', resetAFK); window.addEventListener('touchstart', resetAFK);
     setInterval(() => { if(user && user.phone) { afkTime++; if(afkTime >= 600) logoutContestant(); } }, 1000);
@@ -177,19 +160,36 @@
         let loc = fixedLoc || document.getElementById('user-location').value; if(!loc) return;
         api({ action: "getConfig", location: loc }, (res) => {
             dynamicPrizes = res.prizes; dynamicImages = res.images; colors = dynamicPrizes.map((p, i) => baseColors[i % baseColors.length]); 
-            if(res.stAvatar) {
-                let av = res.stAvatar.startsWith('http') ? res.stAvatar : 'upload/image/' + res.stAvatar;
-                document.getElementById('station-logo').src = av;
-            }
+            if(res.stAvatar) { let av = res.stAvatar.startsWith('http') ? res.stAvatar : 'upload/image/' + res.stAvatar; document.getElementById('station-logo').src = av; }
             draw(); startIdleSpin(); 
         });
     }
 
+    // UPLOAD AVATAR VÀO BÊN TRONG GAME
     function uploadAvatar(input) {
-        if (!input.files[0]) return; let apiKey = window.sysConfig ? window.sysConfig.imgbbKey : ""; 
-        if (!apiKey) return Swal.fire("Thông báo", "Chức năng tải ảnh đang bảo trì, hệ thống sẽ dùng Logo TVU mặc định.", "info");
-        let fd = new FormData(); fd.append("image", input.files[0]); Swal.fire({title: 'Đang làm đẹp ảnh...', didOpen: () => Swal.showLoading()});
-        fetch('https://api.imgbb.com/1/upload?key=' + apiKey, { method: 'POST', body: fd }).then(r => r.json()).then(data => { if (data.success) { Swal.close(); document.getElementById('final-avatar-link').value = data.data.url; document.getElementById('user-avatar-preview').src = data.data.url; } else Swal.fire("Lỗi", "Tải ảnh thất bại", "error"); }).catch(() => Swal.fire("Lỗi", "Mạng yếu, vui lòng thử lại", "error"));
+        if (!input.files[0]) return; 
+        let apiKey = window.sysConfig ? window.sysConfig.imgbbKey : ""; 
+        if (!apiKey) return Swal.fire("Thông báo", "Hệ thống chưa cấu hình API tải ảnh.", "warning");
+        
+        let fd = new FormData(); fd.append("image", input.files[0]); 
+        Swal.fire({title: 'Đang tải ảnh lên Cloud...', didOpen: () => Swal.showLoading()});
+        
+        fetch('https://api.imgbb.com/1/upload?key=' + apiKey, { method: 'POST', body: fd })
+        .then(r => r.json())
+        .then(data => { 
+            if (data.success) { 
+                let newAvatarUrl = data.data.url;
+                api({ action: "updateAvatar", phone: user.phone, avatar: newAvatarUrl }, (res) => {
+                    Swal.close();
+                    if(res.status === 'success') {
+                        user.avatar = newAvatarUrl;
+                        localStorage.setItem('tvu_user_session', JSON.stringify(user));
+                        renderUser();
+                        Swal.fire({icon: 'success', title: 'Cập nhật ảnh thành công!', timer: 1500, showConfirmButton: false});
+                    } else { Swal.fire("Lỗi", "Không thể lưu ảnh vào máy chủ", "error"); }
+                });
+            } else Swal.fire("Lỗi", "Tải ảnh thất bại", "error"); 
+        }).catch(() => Swal.fire("Lỗi", "Mạng yếu, vui lòng thử lại", "error"));
     }
 
     function draw() {
@@ -205,13 +205,17 @@
 
     function renderUser() {
         let uAv = user.avatar; if(!uAv || !uAv.startsWith('http')) uAv = 'upload/image/logotvu.png';
+        
         document.getElementById('user-profile-top').innerHTML = `
             <div style="display:flex; gap:15px; align-items:center;">
-                <img src="${uAv}" style="width:55px;height:55px;border-radius:50%;object-fit:cover;border:2px solid #0054a6;">
+                <div style="position:relative; cursor:pointer; display:inline-block;" onclick="document.getElementById('avatar-input').click()" title="Thay đổi ảnh đại diện">
+                    <img src="${uAv}" style="width:60px;height:60px;border-radius:50%;object-fit:cover;border:2px solid #0054a6; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                    <div style="position:absolute; bottom:0; right:0; background:#e84393; color:#fff; border-radius:50%; width:22px; height:22px; display:flex; align-items:center; justify-content:center; font-size:11px; border:2px solid #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.2);"><i class="fas fa-camera"></i></div>
+                </div>
                 <div class="user-detail-grid" style="flex:1;">
                     <div><i class="fas fa-user" style="color:var(--blue); width:15px;"></i> <b>${user.name}</b> <span style="color:#6c757d">(${user.school})</span></div>
                     <div><i class="fas fa-envelope" style="color:var(--blue); width:15px;"></i> ${user.email || 'Chưa cập nhật email'}</div>
-                    <div><i class="fas fa-map-marker-alt" style="color:var(--blue); width:15px;"></i> ${user.location}</div>
+                    <div style="background: rgba(0,84,166,0.1); padding: 6px 10px; border-radius: 6px; margin-top: 5px; color:#0054a6; font-weight:bold;"><i class="fas fa-map-marker-alt" style="width:15px;"></i> Trạm: ${user.location}</div>
                 </div>
             </div>
         `;
@@ -256,15 +260,16 @@
     function handleAuth() {
         let locSelect = document.getElementById('user-location'); let loc = locSelect.value;
         let ph = document.getElementById('phone').value.trim(); let em = document.getElementById('email').value.trim(); let n = document.getElementById('name').value.trim(); let s = document.getElementById('school').value.trim();
-        let av = document.getElementById('final-avatar-link').value.trim();
         if (!loc) return Swal.fire("Lỗi", "Vui lòng CHỌN ĐỊA ĐIỂM!", "error"); 
-        if (!/^(03|05|07|08|09)[0-9]{8}$/.test(ph)) return Swal.fire("Lỗi", "Số điện thoại không hợp lệ!", "error");
-        if (!em || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) return Swal.fire("Lỗi", "Vui lòng nhập Email đúng định dạng!", "error");
-        if (!n || !s) return Swal.fire("Lỗi", "Nhập đủ Họ Tên và Trường!", "error");
+        if (!/^(03|05|07|08|09)[0-9]{8}$/.test(ph)) return Swal.fire("Lỗi Xác Thực", "Số điện thoại không hợp lệ!", "error");
+        if (!em || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) return Swal.fire("Lỗi Xác Thực", "Vui lòng nhập đúng địa chỉ Email của bạn!", "error");
+        if (!n || !s) return Swal.fire("Lỗi", "Vui lòng nhập đủ Họ Tên và Trường!", "error");
         
         Swal.fire({title: 'Đang ghi danh...', allowOutsideClick: false, didOpen: () => Swal.showLoading()});
-        api({ action: "auth", phone: ph, name: n, school: s, location: loc, email: em, avatar: av }, (res) => {
-            Swal.close(); user = res; user.location = loc; localStorage.setItem('tvu_user_session', JSON.stringify(user)); resetAFK();
+        api({ action: "auth", phone: ph, name: n, school: s, location: loc, email: em, avatar: "logotvu.png" }, (res) => {
+            Swal.close(); 
+            if(res.error) return Swal.fire("Lỗi Đăng Ký", res.error, "error"); // Đã bắt lỗi khóa chéo Email SĐT ở đây
+            user = res; user.location = loc; localStorage.setItem('tvu_user_session', JSON.stringify(user)); resetAFK();
             document.getElementById('admin-link-btn').style.display = 'none'; document.getElementById('auth-box').style.display = 'none'; document.getElementById('game-box').style.display = 'block';
             renderUser(); startPolling(); 
         });
@@ -276,9 +281,8 @@
             if(!spinning) {
                 api({ action: "syncState", phone: user.phone }, (res) => {
                     if(!res.error) {
-                        if(user.turns !== res.turns || JSON.stringify(user.mission) !== JSON.stringify(res.mission) || (user.spinHistory && res.spinHistory && user.spinHistory.length !== res.spinHistory.length)) {
-                            user.turns = res.turns; user.mission = res.mission; user.spinHistory = res.spinHistory;
-                            if(res.avatar) user.avatar = res.avatar;
+                        if(user.turns !== res.turns || JSON.stringify(user.mission) !== JSON.stringify(res.mission) || (user.spinHistory && res.spinHistory && user.spinHistory.length !== res.spinHistory.length) || user.avatar !== res.avatar) {
+                            user.turns = res.turns; user.mission = res.mission; user.spinHistory = res.spinHistory; if(res.avatar) user.avatar = res.avatar;
                             localStorage.setItem('tvu_user_session', JSON.stringify(user)); renderUser();
                         }
                     }
