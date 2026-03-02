@@ -9,7 +9,7 @@
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
         :root { --blue: #0054a6; --cyan: #00d4ff; }
         body, html { margin: 0; padding: 0; font-family: 'Nunito', sans-serif; min-height: 100vh; background: url('upload/image/tvubg.jpg') center center / cover no-repeat fixed; }
         .bg-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 11, 26, 0.75); z-index: 0; }
@@ -23,6 +23,14 @@
         input, select { width: 100%; padding: 14px 15px; margin: 8px 0; border: 1px solid #ced4da; border-radius: 10px; box-sizing: border-box; font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 600; background: #f8f9fa;}
         input:focus, select:focus { border-color: var(--blue); outline: none; box-shadow: 0 0 0 3px rgba(0,84,166,0.1); background: #fff;}
         select { color: var(--blue); cursor: pointer; }
+        
+        /* AVATAR UPLOAD CSS */
+        .avatar-upload-box { display: flex; align-items: center; gap: 15px; background: #f8f9fa; padding: 10px; border-radius: 10px; border: 1px dashed #ced4da; margin: 8px 0; text-align: left; cursor: pointer; transition: 0.3s;}
+        .avatar-upload-box:hover { border-color: var(--blue); background: rgba(0,84,166,0.05); }
+        .avatar-preview { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1);}
+        .avatar-text { font-size: 13px; color: #555; font-weight: 700; line-height: 1.3;}
+        .avatar-text i { color: var(--blue); }
+
         .btn-spin { background: linear-gradient(135deg, #007bff, #0056b3); color: white; border: none; padding: 15px; width: 100%; border-radius: 12px; font-weight: 800; cursor: pointer; font-size: 18px; transition: all 0.3s; margin-top: 15px; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4); display: flex; align-items: center; justify-content: center; gap: 10px; white-space: nowrap; }
         .btn-spin i { font-size: 20px; }
         .btn-spin:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0, 123, 255, 0.6); }
@@ -46,8 +54,14 @@
         #wheel-wrapper { position: relative; width: 280px; height: 280px; margin: 15px auto; }
         canvas { width: 100%; height: 100%; border-radius: 50%; box-sizing: border-box; }
         #pointer { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 18px solid transparent; border-right: 18px solid transparent; border-top: 30px solid #dc3545; z-index: 100; filter: drop-shadow(0 3px 3px rgba(0,0,0,0.3));}
+        
         @keyframes prizeDance { 0% { transform: scale(0.8) translateY(0); } 25% { transform: scale(1.1) translateY(-10px) rotate(5deg); } 50% { transform: scale(1.0) translateY(0) rotate(-5deg); } 75% { transform: scale(1.1) translateY(-5px) rotate(3deg); } 100% { transform: scale(1) translateY(0) rotate(0); } }
         .dancing-prize { animation: prizeDance 1.5s ease-in-out infinite; filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.8)); max-width: 150px; margin: 20px auto; display: block; }
+        
+        #prize-reveal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 100000; display: none; justify-content: center; align-items: center; flex-direction: column; }
+        .reveal-img { width: 250px; animation: popAndFade 2.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; filter: drop-shadow(0 0 30px rgba(255,255,255,0.8)); }
+        @keyframes popAndFade { 0% { transform: scale(0) rotate(-180deg); opacity: 0; } 30% { transform: scale(1.2) rotate(10deg); opacity: 1; } 50% { transform: scale(1) rotate(0deg); opacity: 1; } 80% { transform: scale(1.1); opacity: 1; filter: drop-shadow(0 0 50px rgba(255, 215, 0, 1)); } 100% { transform: scale(0.2); opacity: 0; } }
+
         .admin-link { margin-top: 20px; font-size: 13px; color: rgba(255,255,255,0.7); text-decoration: none; display: inline-block; transition: 0.3s; z-index: 9999; font-weight: 600; padding: 8px 15px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2);}
         .admin-link:hover { color: #fff; background: rgba(255,255,255,0.1); }
         .copyright-text { margin-top: 15px; font-size: 12px; color: rgba(255,255,255,0.5); z-index: 9999; text-align: center; letter-spacing: 0.5px;}
@@ -61,17 +75,26 @@
 <audio id="winSound" src="audio/trung.mp3" preload="auto"></audio>
 <audio id="loseSound" src="audio/truot.mp3" preload="auto"></audio>
 
+<div id="prize-reveal-overlay"><img id="reveal-img" src="" class="reveal-img"></div>
 <div id="loading-overlay"><i class="fas fa-circle-notch fa-spin" style="font-size: 40px; margin-bottom: 15px;"></i> Đang kết nối...</div>
 
 <div class="main-container">
     <div class="card">
         <div class="brand-header">
-            <img src="upload/image/logotvu.png" alt="Logo TVU" class="tvu-logo" onerror="this.style.display='none'">
+            <img id="station-logo" src="upload/image/logotvu.png" alt="Logo TVU" class="tvu-logo" onerror="this.src='upload/image/logotvu.png'">
             <h3 class="event-title">VÒNG QUAY MAY MẮN</h3>
         </div>
         
         <div id="auth-box">
             <select id="user-location" onchange="loadStationConfig()"><option value="">-- CHỌN ĐỊA ĐIỂM SỰ KIỆN (*) --</option></select>
+            
+            <div class="avatar-upload-box" onclick="document.getElementById('avatar-input').click()">
+                <img id="user-avatar-preview" src="upload/image/logotvu.png" class="avatar-preview">
+                <div class="avatar-text"><i class="fas fa-camera"></i> Tải lên ảnh đại diện<br><span style="font-weight:normal;font-size:11px;">(Sẽ dùng Logo TVU nếu bỏ trống)</span></div>
+            </div>
+            <input type="file" id="avatar-input" style="display:none" onchange="uploadAvatar(this)">
+            <input type="hidden" id="final-avatar-link" value="">
+
             <input type="tel" id="phone" placeholder="Số điện thoại cá nhân (*)" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, ''); if(this.value.length === 1 && this.value !== '0') this.value = '';">
             <input type="text" id="name" placeholder="Họ và tên (*)">
             <input type="email" id="email" placeholder="Email nhận thông báo (*)">
@@ -80,7 +103,7 @@
         </div>
 
         <div id="game-box" style="display:none">
-            <button class="btn-exit-small" onclick="logoutContestant()"><i class="fas fa-sign-out-alt"></i> Thoát Trạm</button>
+            <button class="btn-exit-small" onclick="logoutContestant()"><i class="fas fa-sign-out-alt"></i> Thoát ra</button>
             <div class="user-panel" id="user-profile-top"></div>
             <div id="wheel-wrapper"><div id="pointer"></div><canvas id="wheel"></canvas></div>
             <div id="user-turns-bottom" style="display:flex; justify-content:space-between; align-items:center; margin-top:10px; padding:10px; background:#fff; border-radius:10px; border:1px solid #dce1e6;"></div>
@@ -100,13 +123,17 @@
 </div>
 
 <script>
-    // ĐÃ THAY ĐÚNG LINK API MỚI
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwKZgN66DpkGr-4FAo9BcEt4xt8oHos-PWQInCm4G40mUgdGc5BtJiOXfnOdRud5XFGMw/exec";
     
     let dynamicPrizes = []; let dynamicImages = {}; let colors = []; let user = {}; let rotation = 0; let spinning = false; let pollInterval;
     let currentMissionLink = "";
     const baseColors = ['#808285', '#0054a6', '#00d4ff', '#28a745', '#f39c12', '#9b59b6', '#e84393', '#ed1c24'];
-    let isIdle = false; let idleReq;
+    let isIdle = false; let idleReq; let afkTime = 0;
+
+    // AFK 10 PHÚT NGƯỜI CHƠI
+    function resetAFK() { afkTime = 0; if(user && user.phone) localStorage.setItem("tvu_user_time", Date.now()); }
+    window.addEventListener('mousemove', resetAFK); window.addEventListener('keypress', resetAFK); window.addEventListener('touchstart', resetAFK);
+    setInterval(() => { if(user && user.phone) { afkTime++; if(afkTime >= 600) logoutContestant(); } }, 1000);
 
     particlesJS("particles-js", { "particles": { "number": { "value": 80, "density": { "enable": true, "value_area": 800 } }, "color": { "value": "#00d4ff" }, "shape": { "type": "circle" }, "size": { "value": 2.5, "random": true }, "line_linked": { "enable": true, "distance": 150, "color": "#00d4ff", "opacity": 0.5, "width": 1 }, "move": { "enable": true, "speed": 1.2 } }, "interact": { "detect_on": "canvas", "events": { "onhover": { "enable": true, "mode": "grab" }, "resize": true }, "modes": { "grab": { "distance": 150, "line_linked": { "opacity": 1 } } } }, "retina_detect": true });
 
@@ -133,17 +160,16 @@
         api({ action: "getConfig" }, (res) => {
             let locSelect = document.getElementById('user-location'); locSelect.innerHTML = '<option value="">-- CHỌN ĐỊA ĐIỂM SỰ KIỆN (*) --</option>';
             if (res && res.locations && res.locations.length > 0) { res.locations.forEach(l => { if (l.trim() !== "") locSelect.innerHTML += `<option value="${l}">${l}</option>`; }); } 
+            if(res && res.sysConfig) window.sysConfig = res.sysConfig;
             
-            if(res && res.sysConfig) { window.sysConfig = res.sysConfig; }
-
             document.getElementById('loading-overlay').style.display = 'none';
-            let savedUser = localStorage.getItem('tvu_user_session');
-            if(savedUser) { 
+            let savedUser = localStorage.getItem('tvu_user_session'); let sTime = localStorage.getItem('tvu_user_time');
+            if(savedUser && sTime && (Date.now() - parseInt(sTime) < 10*60*1000)) { 
                 user = JSON.parse(savedUser); loadStationConfig(user.location); 
                 document.getElementById('admin-link-btn').style.display = 'none';
                 document.getElementById('auth-box').style.display = 'none'; document.getElementById('game-box').style.display = 'block'; 
-                renderUser(); startPolling(); 
-            }
+                renderUser(); startPolling(); resetAFK();
+            } else { localStorage.removeItem('tvu_user_session'); }
         });
     };
 
@@ -151,8 +177,19 @@
         let loc = fixedLoc || document.getElementById('user-location').value; if(!loc) return;
         api({ action: "getConfig", location: loc }, (res) => {
             dynamicPrizes = res.prizes; dynamicImages = res.images; colors = dynamicPrizes.map((p, i) => baseColors[i % baseColors.length]); 
+            if(res.stAvatar) {
+                let av = res.stAvatar.startsWith('http') ? res.stAvatar : 'upload/image/' + res.stAvatar;
+                document.getElementById('station-logo').src = av;
+            }
             draw(); startIdleSpin(); 
         });
+    }
+
+    function uploadAvatar(input) {
+        if (!input.files[0]) return; let apiKey = window.sysConfig ? window.sysConfig.imgbbKey : ""; 
+        if (!apiKey) return Swal.fire("Thông báo", "Chức năng tải ảnh đang bảo trì, hệ thống sẽ dùng Logo TVU mặc định.", "info");
+        let fd = new FormData(); fd.append("image", input.files[0]); Swal.fire({title: 'Đang làm đẹp ảnh...', didOpen: () => Swal.showLoading()});
+        fetch('https://api.imgbb.com/1/upload?key=' + apiKey, { method: 'POST', body: fd }).then(r => r.json()).then(data => { if (data.success) { Swal.close(); document.getElementById('final-avatar-link').value = data.data.url; document.getElementById('user-avatar-preview').src = data.data.url; } else Swal.fire("Lỗi", "Tải ảnh thất bại", "error"); }).catch(() => Swal.fire("Lỗi", "Mạng yếu, vui lòng thử lại", "error"));
     }
 
     function draw() {
@@ -167,13 +204,14 @@
     }
 
     function renderUser() {
+        let uAv = user.avatar; if(!uAv || !uAv.startsWith('http')) uAv = 'upload/image/logotvu.png';
         document.getElementById('user-profile-top').innerHTML = `
-            <div class="user-detail-grid">
-                <div><i class="fas fa-user" style="color:var(--blue); width:15px;"></i> <b>${user.name}</b> <span style="color:#6c757d">(${user.school})</span></div>
-                <div><i class="fas fa-envelope" style="color:var(--blue); width:15px;"></i> ${user.email || 'Chưa cập nhật email'}</div>
-                <div><i class="fas fa-phone-alt" style="color:var(--blue); width:15px;"></i> ${user.phone}</div>
-                <div style="background: rgba(0,84,166,0.1); padding: 6px 10px; border-radius: 6px; margin-top: 5px; color:#0054a6; font-weight:bold;">
-                    <i class="fas fa-map-marker-alt" style="width:15px;"></i> Trạm hiện tại: ${user.location}
+            <div style="display:flex; gap:15px; align-items:center;">
+                <img src="${uAv}" style="width:55px;height:55px;border-radius:50%;object-fit:cover;border:2px solid #0054a6;">
+                <div class="user-detail-grid" style="flex:1;">
+                    <div><i class="fas fa-user" style="color:var(--blue); width:15px;"></i> <b>${user.name}</b> <span style="color:#6c757d">(${user.school})</span></div>
+                    <div><i class="fas fa-envelope" style="color:var(--blue); width:15px;"></i> ${user.email || 'Chưa cập nhật email'}</div>
+                    <div><i class="fas fa-map-marker-alt" style="color:var(--blue); width:15px;"></i> ${user.location}</div>
                 </div>
             </div>
         `;
@@ -183,28 +221,20 @@
         `;
         document.getElementById('spin-btn').disabled = (user.turns <= 0);
 
-        // THUẬT TOÁN 3 NHIỆM VỤ
         let hasWon = false;
-        if (user.spinHistory && user.spinHistory.length > 0) {
-            user.spinHistory.forEach(h => { if (h.prize && h.prize !== "May mắn lần sau" && h.prize !== "Chưa có") hasWon = true; });
-        }
+        if (user.spinHistory && user.spinHistory.length > 0) { user.spinHistory.forEach(h => { if (h.prize && h.prize !== "May mắn lần sau" && h.prize !== "Chưa có") hasWon = true; }); }
         
         let mData = {granted: 0, completed: 0};
-        try { mData = typeof user.mission === 'string' ? JSON.parse(user.mission) : user.mission; } 
-        catch(e) { if(user.mission === 'pending') mData = {granted: 1, completed: 0}; }
+        try { mData = typeof user.mission === 'string' ? JSON.parse(user.mission) : user.mission; } catch(e) { if(user.mission === 'pending') mData = {granted: 1, completed: 0}; }
         if(!mData) mData = {granted: 0, completed: 0};
 
         if (!hasWon && mData.granted > mData.completed && window.sysConfig) {
-            let nextNum = mData.completed + 1; // Nhảy số 1, 2, hoặc 3
-            currentMissionLink = window.sysConfig[`m${nextNum}Link`];
-            
+            let nextNum = mData.completed + 1; currentMissionLink = window.sysConfig[`m${nextNum}Link`];
             document.getElementById('mission-icon-display').className = window.sysConfig[`m${nextNum}Icon`];
             document.getElementById('mission-title-display').innerText = `NHIỆM VỤ ${nextNum}/${mData.granted} ĐỂ NHẬN LƯỢT`;
             document.getElementById('mission-text-display').innerText = "(" + window.sysConfig[`m${nextNum}Text`] + ")";
             document.getElementById('mission-box').style.display = 'block';
-        } else {
-            document.getElementById('mission-box').style.display = 'none';
-        }
+        } else { document.getElementById('mission-box').style.display = 'none'; }
 
         let histHtml = '';
         if (user.spinHistory && user.spinHistory.length > 0) {
@@ -212,13 +242,12 @@
             let revHist = [...user.spinHistory].reverse();
             revHist.forEach(h => {
                 let d = new Date(h.time).toLocaleTimeString('vi-VN', {hour: '2-digit', minute:'2-digit'});
-                let pColor = h.prize === 'May mắn lần sau' ? '#6c757d' : '#dc3545'; let pText = h.prize === 'May mắn lần sau' ? 'Trượt' : h.prize;
+                let pColor = h.prize === 'May mắn lần sau' ? '#6c757d' : '#dc3545'; 
+                let pText = h.prize === 'May mắn lần sau' ? 'Chưa trúng thưởng' : h.prize; 
                 histHtml += `<div class="history-item"><div class="history-time"><i class="far fa-clock"></i> ${d}</div><div class="history-detail"><span class="history-loc"><i class="fas fa-map-marker-alt" style="color:#11998e;"></i> ${h.location}</span><span class="history-prize" style="color:${pColor};">${pText}</span></div></div>`;
             });
             histHtml += `</div>`;
-        } else {
-            histHtml = `<div class="history-box" style="text-align:center; color:#999; font-style:italic;">Chưa có lịch sử quay số</div>`;
-        }
+        } else { histHtml = `<div class="history-box" style="text-align:center; color:#999; font-style:italic;">Chưa có lịch sử quay số</div>`; }
         document.getElementById('user-history-bottom').innerHTML = histHtml;
     }
 
@@ -227,16 +256,16 @@
     function handleAuth() {
         let locSelect = document.getElementById('user-location'); let loc = locSelect.value;
         let ph = document.getElementById('phone').value.trim(); let em = document.getElementById('email').value.trim(); let n = document.getElementById('name').value.trim(); let s = document.getElementById('school').value.trim();
+        let av = document.getElementById('final-avatar-link').value.trim();
         if (!loc) return Swal.fire("Lỗi", "Vui lòng CHỌN ĐỊA ĐIỂM!", "error"); 
-        if (!/^(03|05|07|08|09)[0-9]{8}$/.test(ph)) return Swal.fire("Lỗi Xác Thực", "Số điện thoại không hợp lệ!", "error");
-        if (!em || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) return Swal.fire("Lỗi Xác Thực", "Vui lòng nhập đúng địa chỉ Email của bạn!", "error");
-        if (!n || !s) return Swal.fire("Lỗi", "Vui lòng nhập đủ Họ Tên và Trường!", "error");
+        if (!/^(03|05|07|08|09)[0-9]{8}$/.test(ph)) return Swal.fire("Lỗi", "Số điện thoại không hợp lệ!", "error");
+        if (!em || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) return Swal.fire("Lỗi", "Vui lòng nhập Email đúng định dạng!", "error");
+        if (!n || !s) return Swal.fire("Lỗi", "Nhập đủ Họ Tên và Trường!", "error");
         
         Swal.fire({title: 'Đang ghi danh...', allowOutsideClick: false, didOpen: () => Swal.showLoading()});
-        api({ action: "auth", phone: ph, name: n, school: s, location: loc, email: em }, (res) => {
-            Swal.close(); user = res; user.location = loc; localStorage.setItem('tvu_user_session', JSON.stringify(user));
-            document.getElementById('admin-link-btn').style.display = 'none';
-            document.getElementById('auth-box').style.display = 'none'; document.getElementById('game-box').style.display = 'block';
+        api({ action: "auth", phone: ph, name: n, school: s, location: loc, email: em, avatar: av }, (res) => {
+            Swal.close(); user = res; user.location = loc; localStorage.setItem('tvu_user_session', JSON.stringify(user)); resetAFK();
+            document.getElementById('admin-link-btn').style.display = 'none'; document.getElementById('auth-box').style.display = 'none'; document.getElementById('game-box').style.display = 'block';
             renderUser(); startPolling(); 
         });
     }
@@ -249,6 +278,7 @@
                     if(!res.error) {
                         if(user.turns !== res.turns || JSON.stringify(user.mission) !== JSON.stringify(res.mission) || (user.spinHistory && res.spinHistory && user.spinHistory.length !== res.spinHistory.length)) {
                             user.turns = res.turns; user.mission = res.mission; user.spinHistory = res.spinHistory;
+                            if(res.avatar) user.avatar = res.avatar;
                             localStorage.setItem('tvu_user_session', JSON.stringify(user)); renderUser();
                         }
                     }
@@ -263,9 +293,8 @@
         api({ action: "syncState", phone: user.phone }, (res) => {
             Swal.close();
             if(!res.error) {
-                user.turns = res.turns; user.mission = res.mission; user.spinHistory = res.spinHistory;
-                localStorage.setItem('tvu_user_session', JSON.stringify(user)); renderUser();
-                Swal.fire("Thông báo", "Dữ liệu đã được làm mới!", "success");
+                user.turns = res.turns; user.mission = res.mission; user.spinHistory = res.spinHistory; if(res.avatar) user.avatar = res.avatar;
+                localStorage.setItem('tvu_user_session', JSON.stringify(user)); renderUser(); Swal.fire("Thông báo", "Dữ liệu đã được cập nhật!", "success");
             }
         });
     };
@@ -276,17 +305,14 @@
         api({ action: "completeMission", phone: user.phone }, (res) => {
             if(res.status === 'success') {
                 Swal.fire("THÀNH CÔNG!", "Bạn đã nhận được thêm 1 LƯỢT QUAY!", "success");
-                user.turns = res.turns; user.mission = res.mission;
-                localStorage.setItem('tvu_user_session', JSON.stringify(user)); renderUser();
-            } else {
-                Swal.fire("Lỗi", res.error || "Nhiệm vụ không khả dụng", "error");
-            }
+                user.turns = res.turns; user.mission = res.mission; localStorage.setItem('tvu_user_session', JSON.stringify(user)); renderUser();
+            } else { Swal.fire("Lỗi", res.error || "Nhiệm vụ không khả dụng", "error"); }
         });
     }
 
     function startSpin() {
         if(spinning || user.turns <= 0) return; 
-        spinning = true; stopIdleSpin();
+        spinning = true; stopIdleSpin(); resetAFK();
 
         Swal.fire({title: 'Đang tạo mã quay...', allowOutsideClick: false, didOpen: () => Swal.showLoading()});
         api({ action: "spin", phone: user.phone }, (res) => {
@@ -298,11 +324,9 @@
             winA.volume=0; winA.play().then(()=>winA.pause()).catch(()=>{}); winA.volume=1; loseA.volume=0; loseA.play().then(()=>loseA.pause()).catch(()=>{}); loseA.volume=1;
 
             let winIdx = dynamicPrizes.indexOf(res.prize); if(winIdx === -1) winIdx = 0; 
-            const slice = 360 / dynamicPrizes.length;
-            let currentMod = rotation % 360;
+            const slice = 360 / dynamicPrizes.length; let currentMod = rotation % 360;
             let targetAngle = 270 - (winIdx * slice + slice / 2) + (Math.floor(Math.random() * 20) - 10);
-            targetAngle = (targetAngle % 360 + 360) % 360; 
-            let diff = targetAngle - currentMod; if (diff < 0) diff += 360;
+            targetAngle = (targetAngle % 360 + 360) % 360; let diff = targetAngle - currentMod; if (diff < 0) diff += 360;
             
             rotation += (360 * 8) + diff;
             let wheel = document.getElementById('wheel');
@@ -312,20 +336,37 @@
             tickA.volume = 1.0; let tickInt = setInterval(() => { tickA.currentTime=0; tickA.play().catch(()=>{}); }, 150);
 
             setTimeout(() => {
-                clearInterval(tickInt); spinning = false; const p = dynamicPrizes[winIdx];
+                clearInterval(tickInt); spinning = false; const p = res.prize;
                 if(p === "May mắn lần sau") {
-                    loseA.play().catch(()=>{}); Swal.fire("RẤT TIẾC!", "Trượt rồi, chúc bạn may mắn lần sau nhé!", "error").then(() => startIdleSpin());
+                    loseA.play().catch(()=>{}); Swal.fire("RẤT TIẾC!", "Chưa trúng thưởng rồi, chúc bạn may mắn lần sau nhé!", "error").then(() => startIdleSpin());
+                    user.spinHistory = res.spinHistory; localStorage.setItem('tvu_user_session', JSON.stringify(user)); renderUser();
                 } else {
-                    winA.play().catch(()=>{}); confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
-                    let rawDynamicImg = dynamicImages[p]; let realImgSrc = rawDynamicImg;
+                    let rawDynamicImg = res.prizeImage || dynamicImages[p]; let realImgSrc = rawDynamicImg;
                     if (rawDynamicImg && rawDynamicImg.includes('http')) { realImgSrc = rawDynamicImg.substring(rawDynamicImg.indexOf('http')); }
-                    let img = realImgSrc ? `<img src="${realImgSrc}" class="dancing-prize" onerror="this.style.display='none'">` : '';
-                    Swal.fire({ title: 'TUYỆT VỜI!', html: `Chúc mừng bạn đã trúng:<br><b style="color:#dc3545; font-size:22px;">${p}</b><br><small><i>(Vui lòng kiểm tra Email để nhận thông báo)</i></small>` + img, icon: 'success' }).then(() => startIdleSpin());
-                    user.prizes = p; 
+                    else { realImgSrc = 'upload/image/' + rawDynamicImg; }
+                    
+                    winA.play().catch(()=>{});
+                    let overlay = document.getElementById('prize-reveal-overlay');
+                    document.getElementById('reveal-img').src = realImgSrc;
+                    overlay.style.display = 'flex';
+                    
+                    setTimeout(() => {
+                        overlay.style.display = 'none';
+                        let titleHtml = 'TUYỆT VỜI!'; let prizeHtml = `<b style="color:#dc3545; font-size:22px;">${p}</b>`;
+                        
+                        if(res.isSpecial) {
+                            confetti({ particleCount: 400, spread: 150, origin: { y: 0.6 }, startVelocity: 45 });
+                            titleHtml = '🎉 BẠN THẬT MAY MẮN!!! 🎉';
+                            prizeHtml = `<b style="color:#e84393; font-size:32px; font-weight:900; text-transform:uppercase; text-shadow: 0 2px 4px rgba(0,0,0,0.2);">${p}</b>`;
+                        } else { confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } }); }
+
+                        let img = realImgSrc ? `<img src="${realImgSrc}" class="dancing-prize" onerror="this.style.display='none'">` : '';
+                        Swal.fire({ title: titleHtml, html: `Chúc mừng bạn đã trúng:<br>${prizeHtml}<br><small style="color:#666; margin-top:10px; display:block;"><i>(Vui lòng kiểm tra Email để nhận thông báo)</i></small>` + img, icon: 'success' }).then(() => startIdleSpin());
+                        
+                        user.prizes = p; user.spinHistory = res.spinHistory; user.mission = ""; 
+                        localStorage.setItem('tvu_user_session', JSON.stringify(user)); renderUser();
+                    }, 2800);
                 }
-                user.spinHistory = res.spinHistory; 
-                user.mission = ""; // Xóa nhiệm vụ nếu trúng
-                localStorage.setItem('tvu_user_session', JSON.stringify(user)); renderUser();
             }, 5000);
         });
     }
