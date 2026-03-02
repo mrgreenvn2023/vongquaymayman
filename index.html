@@ -23,16 +23,12 @@
         input, select { width: 100%; padding: 14px 15px; margin: 8px 0; border: 1px solid #ced4da; border-radius: 10px; box-sizing: border-box; font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 600; background: #f8f9fa;}
         input:focus, select:focus { border-color: var(--blue); outline: none; box-shadow: 0 0 0 3px rgba(0,84,166,0.1); background: #fff;}
         select { color: var(--blue); cursor: pointer; }
-        
-        /* Nút đăng ký gọn đẹp */
         .btn-spin { background: linear-gradient(135deg, #007bff, #0056b3); color: white; border: none; padding: 15px; width: 100%; border-radius: 12px; font-weight: 800; cursor: pointer; font-size: 18px; transition: all 0.3s; margin-top: 15px; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4); display: flex; align-items: center; justify-content: center; gap: 10px; white-space: nowrap; }
         .btn-spin i { font-size: 20px; }
         .btn-spin:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0, 123, 255, 0.6); }
         .btn-spin:disabled { background: #6c757d; cursor: not-allowed; box-shadow: none; transform: none; }
-        
         #spin-btn { background: linear-gradient(135deg, #11998e, #38ef7d); box-shadow: 0 5px 15px rgba(56,239,125,0.4); }
         #spin-btn:hover { box-shadow: 0 8px 20px rgba(56,239,125,0.6); }
-        
         .btn-exit-small { position: absolute; top: 15px; right: 15px; background: #ffebee; color: #dc3545; border: 1px solid #ffc107; padding: 6px 12px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 13px; z-index: 100; transition: 0.3s;}
         .btn-exit-small:hover { background: #dc3545; color: white; border-color: #dc3545; }
         .user-panel { background: #e8f4fd; padding: 15px; border-radius: 12px; text-align: left; font-size: 14px; margin-bottom: 10px; border-left: 5px solid var(--blue); color: #2c3e50;}
@@ -91,7 +87,7 @@
 
             <div id="mission-box" class="mission-box" onclick="doMission()">
                 <i id="mission-icon-display" class="fab fa-facebook" style="font-size: 20px; margin-bottom:5px;"></i><br>
-                <b>LÀM NHIỆM VỤ ĐỂ NHẬN THÊM LƯỢT QUAY!</b><br>
+                <b id="mission-title-display">LÀM NHIỆM VỤ ĐỂ NHẬN THÊM LƯỢT!</b><br>
                 <small id="mission-text-display">(Nhấn vào đây để thực hiện)</small>
             </div>
 
@@ -108,7 +104,7 @@
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwKZgN66DpkGr-4FAo9BcEt4xt8oHos-PWQInCm4G40mUgdGc5BtJiOXfnOdRud5XFGMw/exec";
     
     let dynamicPrizes = []; let dynamicImages = {}; let colors = []; let user = {}; let rotation = 0; let spinning = false; let pollInterval;
-    let systemMissionLink = "https://www.facebook.com/TraVinhUniversity.TVU"; 
+    let currentMissionLink = "";
     const baseColors = ['#808285', '#0054a6', '#00d4ff', '#28a745', '#f39c12', '#9b59b6', '#e84393', '#ed1c24'];
     let isIdle = false; let idleReq;
 
@@ -116,10 +112,8 @@
 
     function api(params, cb) {
         try {
-            const callbackName = 'cb_' + Math.round(Math.random() * 1000000);
-            const script = document.createElement('script');
-            // THỜI GIAN CHỜ LÊN 35 GIÂY CHO WIFI TRƯỜNG
-            let timeoutId = setTimeout(() => { if (window[callbackName]) { document.body.removeChild(script); delete window[callbackName]; if(params.action !== 'syncState') Swal.fire("Lỗi Kết Nối", "Mạng Wifi của trường đang chặn hoặc quá chậm. Vui lòng chuyển sang dùng mạng 4G!", "error"); document.getElementById('loading-overlay').style.display = 'none'; } }, 35000);
+            const callbackName = 'cb_' + Math.round(Math.random() * 1000000); const script = document.createElement('script');
+            let timeoutId = setTimeout(() => { if (window[callbackName]) { document.body.removeChild(script); delete window[callbackName]; if(params.action !== 'syncState') Swal.fire("Lỗi Kết Nối", "Mạng Wifi đang chặn. Vui lòng dùng 4G!", "error"); document.getElementById('loading-overlay').style.display = 'none'; } }, 35000);
             window[callbackName] = function(data) { clearTimeout(timeoutId); if(script.parentNode) document.body.removeChild(script); delete window[callbackName]; if(data && data.error && params.action !== 'syncState') Swal.fire("Lỗi", data.error, "error"); else cb(data); };
             const qs = Object.keys(params).map(k => k + '=' + encodeURIComponent(params[k])).join('&');
             script.src = SCRIPT_URL + (SCRIPT_URL.indexOf('?') >= 0 ? '&' : '?') + qs + '&callback=' + callbackName + '&t=' + Date.now();
@@ -139,11 +133,9 @@
         api({ action: "getConfig" }, (res) => {
             let locSelect = document.getElementById('user-location'); locSelect.innerHTML = '<option value="">-- CHỌN ĐỊA ĐIỂM SỰ KIỆN (*) --</option>';
             if (res && res.locations && res.locations.length > 0) { res.locations.forEach(l => { if (l.trim() !== "") locSelect.innerHTML += `<option value="${l}">${l}</option>`; }); } 
-            if(res && res.sysConfig) {
-                if(res.sysConfig.missionLink) systemMissionLink = res.sysConfig.missionLink;
-                if(res.sysConfig.missionText) document.getElementById('mission-text-display').innerText = "(" + res.sysConfig.missionText + ")";
-                if(res.sysConfig.missionIcon) document.getElementById('mission-icon-display').className = res.sysConfig.missionIcon;
-            }
+            
+            if(res && res.sysConfig) { window.sysConfig = res.sysConfig; }
+
             document.getElementById('loading-overlay').style.display = 'none';
             let savedUser = localStorage.getItem('tvu_user_session');
             if(savedUser) { 
@@ -191,12 +183,28 @@
         `;
         document.getElementById('spin-btn').disabled = (user.turns <= 0);
 
-        // KIỂM TRA ẨN NHIỆM VỤ NẾU ĐÃ TRÚNG QUÀ
+        // THUẬT TOÁN 3 NHIỆM VỤ
         let hasWon = false;
         if (user.spinHistory && user.spinHistory.length > 0) {
-            user.spinHistory.forEach(h => { if (h.prize && h.prize !== "May mắn lần sau" && h.prize !== "Chưa có") { hasWon = true; } });
+            user.spinHistory.forEach(h => { if (h.prize && h.prize !== "May mắn lần sau" && h.prize !== "Chưa có") hasWon = true; });
         }
-        document.getElementById('mission-box').style.display = (!hasWon && user.mission === 'pending') ? 'block' : 'none';
+        
+        let mData = {granted: 0, completed: 0};
+        try { mData = typeof user.mission === 'string' ? JSON.parse(user.mission) : user.mission; } 
+        catch(e) { if(user.mission === 'pending') mData = {granted: 1, completed: 0}; }
+        if(!mData) mData = {granted: 0, completed: 0};
+
+        if (!hasWon && mData.granted > mData.completed && window.sysConfig) {
+            let nextNum = mData.completed + 1; // Nhảy số 1, 2, hoặc 3
+            currentMissionLink = window.sysConfig[`m${nextNum}Link`];
+            
+            document.getElementById('mission-icon-display').className = window.sysConfig[`m${nextNum}Icon`];
+            document.getElementById('mission-title-display').innerText = `NHIỆM VỤ ${nextNum}/${mData.granted} ĐỂ NHẬN LƯỢT`;
+            document.getElementById('mission-text-display').innerText = "(" + window.sysConfig[`m${nextNum}Text`] + ")";
+            document.getElementById('mission-box').style.display = 'block';
+        } else {
+            document.getElementById('mission-box').style.display = 'none';
+        }
 
         let histHtml = '';
         if (user.spinHistory && user.spinHistory.length > 0) {
@@ -204,8 +212,7 @@
             let revHist = [...user.spinHistory].reverse();
             revHist.forEach(h => {
                 let d = new Date(h.time).toLocaleTimeString('vi-VN', {hour: '2-digit', minute:'2-digit'});
-                let pColor = h.prize === 'May mắn lần sau' ? '#6c757d' : '#dc3545';
-                let pText = h.prize === 'May mắn lần sau' ? 'Trượt' : h.prize;
+                let pColor = h.prize === 'May mắn lần sau' ? '#6c757d' : '#dc3545'; let pText = h.prize === 'May mắn lần sau' ? 'Trượt' : h.prize;
                 histHtml += `<div class="history-item"><div class="history-time"><i class="far fa-clock"></i> ${d}</div><div class="history-detail"><span class="history-loc"><i class="fas fa-map-marker-alt" style="color:#11998e;"></i> ${h.location}</span><span class="history-prize" style="color:${pColor};">${pText}</span></div></div>`;
             });
             histHtml += `</div>`;
@@ -219,16 +226,10 @@
 
     function handleAuth() {
         let locSelect = document.getElementById('user-location'); let loc = locSelect.value;
-        let ph = document.getElementById('phone').value.trim(); 
-        let em = document.getElementById('email').value.trim(); 
-        let n = document.getElementById('name').value.trim(); 
-        let s = document.getElementById('school').value.trim();
-        
-        if (!loc) { return Swal.fire("Lỗi", "Vui lòng CHỌN ĐỊA ĐIỂM!", "error"); }
-        const phoneRegex = /^(03|05|07|08|09)[0-9]{8}$/;
-        if (!phoneRegex.test(ph)) return Swal.fire("Lỗi Xác Thực", "Số điện thoại không hợp lệ!", "error");
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!em || !emailRegex.test(em)) return Swal.fire("Lỗi Xác Thực", "Vui lòng nhập đúng địa chỉ Email của bạn!", "error");
+        let ph = document.getElementById('phone').value.trim(); let em = document.getElementById('email').value.trim(); let n = document.getElementById('name').value.trim(); let s = document.getElementById('school').value.trim();
+        if (!loc) return Swal.fire("Lỗi", "Vui lòng CHỌN ĐỊA ĐIỂM!", "error"); 
+        if (!/^(03|05|07|08|09)[0-9]{8}$/.test(ph)) return Swal.fire("Lỗi Xác Thực", "Số điện thoại không hợp lệ!", "error");
+        if (!em || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) return Swal.fire("Lỗi Xác Thực", "Vui lòng nhập đúng địa chỉ Email của bạn!", "error");
         if (!n || !s) return Swal.fire("Lỗi", "Vui lòng nhập đủ Họ Tên và Trường!", "error");
         
         Swal.fire({title: 'Đang ghi danh...', allowOutsideClick: false, didOpen: () => Swal.showLoading()});
@@ -246,7 +247,7 @@
             if(!spinning) {
                 api({ action: "syncState", phone: user.phone }, (res) => {
                     if(!res.error) {
-                        if(user.turns !== res.turns || user.mission !== res.mission || (user.spinHistory && res.spinHistory && user.spinHistory.length !== res.spinHistory.length)) {
+                        if(user.turns !== res.turns || JSON.stringify(user.mission) !== JSON.stringify(res.mission) || (user.spinHistory && res.spinHistory && user.spinHistory.length !== res.spinHistory.length)) {
                             user.turns = res.turns; user.mission = res.mission; user.spinHistory = res.spinHistory;
                             localStorage.setItem('tvu_user_session', JSON.stringify(user)); renderUser();
                         }
@@ -262,30 +263,23 @@
         api({ action: "syncState", phone: user.phone }, (res) => {
             Swal.close();
             if(!res.error) {
-                let oldMission = user.mission; user.turns = res.turns; user.mission = res.mission; user.spinHistory = res.spinHistory;
+                user.turns = res.turns; user.mission = res.mission; user.spinHistory = res.spinHistory;
                 localStorage.setItem('tvu_user_session', JSON.stringify(user)); renderUser();
-                if(res.mission === 'pending' && oldMission !== 'pending') { Swal.fire("TIN VUI!", "Admin đã tặng thêm lượt cho bạn. Hãy làm nhiệm vụ để nhận ngay!", "info"); } 
-                else if(res.mission !== 'pending') { Swal.fire("Thông báo", "Dữ liệu đã được làm mới!", "success"); }
+                Swal.fire("Thông báo", "Dữ liệu đã được làm mới!", "success");
             }
         });
     };
 
-    document.addEventListener("visibilitychange", function() {
-        if (document.visibilityState === 'visible' && user && user.phone && !spinning) {
-            api({ action: "syncState", phone: user.phone }, (res) => {
-                if(!res.error) { user.turns = res.turns; user.mission = res.mission; user.spinHistory = res.spinHistory; localStorage.setItem('tvu_user_session', JSON.stringify(user)); renderUser(); }
-            });
-        }
-    });
-
     function doMission() {
-        window.open(systemMissionLink, '_blank');
+        if(currentMissionLink) window.open(currentMissionLink, '_blank');
         Swal.fire({title: 'Đang xác nhận...', didOpen: () => Swal.showLoading()});
         api({ action: "completeMission", phone: user.phone }, (res) => {
             if(res.status === 'success') {
                 Swal.fire("THÀNH CÔNG!", "Bạn đã nhận được thêm 1 LƯỢT QUAY!", "success");
-                user.turns = res.turns; user.mission = 'completed';
+                user.turns = res.turns; user.mission = res.mission;
                 localStorage.setItem('tvu_user_session', JSON.stringify(user)); renderUser();
+            } else {
+                Swal.fire("Lỗi", res.error || "Nhiệm vụ không khả dụng", "error");
             }
         });
     }
@@ -320,8 +314,7 @@
             setTimeout(() => {
                 clearInterval(tickInt); spinning = false; const p = dynamicPrizes[winIdx];
                 if(p === "May mắn lần sau") {
-                    loseA.play().catch(()=>{}); 
-                    Swal.fire("RẤT TIẾC!", "Trượt rồi, chúc bạn may mắn lần sau nhé!", "error").then(() => startIdleSpin());
+                    loseA.play().catch(()=>{}); Swal.fire("RẤT TIẾC!", "Trượt rồi, chúc bạn may mắn lần sau nhé!", "error").then(() => startIdleSpin());
                 } else {
                     winA.play().catch(()=>{}); confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
                     let rawDynamicImg = dynamicImages[p]; let realImgSrc = rawDynamicImg;
@@ -331,6 +324,7 @@
                     user.prizes = p; 
                 }
                 user.spinHistory = res.spinHistory; 
+                user.mission = ""; // Xóa nhiệm vụ nếu trúng
                 localStorage.setItem('tvu_user_session', JSON.stringify(user)); renderUser();
             }, 5000);
         });
