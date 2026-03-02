@@ -214,7 +214,9 @@
 </div>
 
 <script>
+    // ĐÃ THAY ĐÚNG LINK API MỚI
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwKZgN66DpkGr-4FAo9BcEt4xt8oHos-PWQInCm4G40mUgdGc5BtJiOXfnOdRud5XFGMw/exec";
+    
     let allData = { stations: {}, history: [], accounts: [], sessions: {}, sysConfig: {} };
     let currentUser = null;
 
@@ -225,7 +227,8 @@
     window.api = function(params, cb) {
         try {
             const callbackName = 'cb_' + Math.round(Math.random() * 1000000); const script = document.createElement('script');
-            let timeoutId = setTimeout(() => { if (window[callbackName]) { document.body.removeChild(script); delete window[callbackName]; Swal.fire("Lỗi", "Mạng yếu!", "error"); } }, 20000);
+            // THỜI GIAN CHỜ LÊN 35 GIÂY
+            let timeoutId = setTimeout(() => { if (window[callbackName]) { document.body.removeChild(script); delete window[callbackName]; Swal.fire("Lỗi Kết Nối", "Mạng Wifi của trường đang chặn hoặc quá chậm. Vui lòng dùng 4G!", "error"); } }, 35000);
             window[callbackName] = function(data) { clearTimeout(timeoutId); if(script.parentNode) document.body.removeChild(script); delete window[callbackName]; if(data && data.error) Swal.fire("Lỗi", data.error, "error"); else cb(data); };
             const qs = Object.keys(params).map(k => k + '=' + encodeURIComponent(params[k])).join('&');
             script.src = SCRIPT_URL + (SCRIPT_URL.indexOf('?') >= 0 ? '&' : '?') + qs + '&callback=' + callbackName + '&t=' + Date.now();
@@ -253,9 +256,7 @@
     }
 
     window.populateFilters = function() {
-        let hLoc = document.getElementById('hist-location-filter');
-        let rLoc = document.getElementById('rep-location');
-        let rAdm = document.getElementById('rep-admin');
+        let hLoc = document.getElementById('hist-location-filter'); let rLoc = document.getElementById('rep-location'); let rAdm = document.getElementById('rep-admin');
         if(hLoc) { hLoc.innerHTML = '<option value="">-- Tất cả Địa điểm --</option>'; Object.keys(allData.stations).forEach(l => hLoc.innerHTML += `<option value="${l}">${l}</option>`); }
         if(rLoc) { rLoc.innerHTML = '<option value="">-- Tất cả Địa điểm --</option>'; Object.keys(allData.stations).forEach(l => rLoc.innerHTML += `<option value="${l}">${l}</option>`); }
         if(rAdm) { rAdm.innerHTML = '<option value="">-- Tất cả Nhân viên --</option>'; allData.accounts.forEach(a => rAdm.innerHTML += `<option value="${a.user}">${a.fullName || a.user}</option>`); }
@@ -290,32 +291,17 @@
 
     window.renderHistory = function() {
         let locFilter = '';
-        if(currentUser.role === 'super') {
-            locFilter = document.getElementById('hist-location-filter').value;
-            document.getElementById('hist-station-label').innerText = "Tất cả dữ liệu";
-        } else {
-            locFilter = allData.sessions[currentUser.user];
-            document.getElementById('hist-station-label').innerText = "Trạm của bạn: " + (locFilter || "Chưa chọn");
-        }
+        if(currentUser.role === 'super') { locFilter = document.getElementById('hist-location-filter').value; document.getElementById('hist-station-label').innerText = "Tất cả dữ liệu"; } 
+        else { locFilter = allData.sessions[currentUser.user]; document.getElementById('hist-station-label').innerText = "Trạm của bạn: " + (locFilter || "Chưa chọn"); }
         let html = '';
         allData.history.forEach(row => {
             if (currentUser.role !== 'super' && row.admin !== currentUser.user) return;
             if (locFilter && row.location !== locFilter) return;
-            
             let statusBadge = '';
             if (row.prize === 'May mắn lần sau' || row.prize === 'Chưa có') { statusBadge = `<span class="badge bg-secondary">-</span>`; } 
             else { statusBadge = `<label><input type="checkbox" class="cb-delivered" data-row="${row.row}" ${row.delivered ? 'checked' : ''}> Đã phát quà</label>`; }
-            
             let timeStr = new Date(row.time).toLocaleString('vi-VN');
-            html += `<div class="winner-row">
-                <div style="flex:2;">
-                    <div style="font-weight:bold; color:#0054a6; font-size:15px;">${row.name}</div>
-                    <div style="font-size:12px; color:#6c757d;"><i class="fas fa-phone"></i> ${row.phone} - ${row.school}</div>
-                    <div style="font-size:11px; color:#888;"><i class="far fa-clock"></i> ${timeStr} | Trạm: ${row.location}</div>
-                </div>
-                <div style="flex:1.5; color:#e84393; font-weight:800; font-size:15px;">${row.prize === 'May mắn lần sau' ? 'Trượt' : row.prize}</div>
-                <div style="flex:1; text-align:right;">${statusBadge}</div>
-            </div>`;
+            html += `<div class="winner-row"><div style="flex:2;"><div style="font-weight:bold; color:#0054a6; font-size:15px;">${row.name}</div><div style="font-size:12px; color:#6c757d;"><i class="fas fa-phone"></i> ${row.phone} - ${row.school}</div><div style="font-size:11px; color:#888;"><i class="far fa-clock"></i> ${timeStr} | Trạm: ${row.location}</div></div><div style="flex:1.5; color:#e84393; font-weight:800; font-size:15px;">${row.prize === 'May mắn lần sau' ? 'Trượt' : row.prize}</div><div style="flex:1; text-align:right;">${statusBadge}</div></div>`;
         });
         document.getElementById('hist-list').innerHTML = html || '<div style="text-align:center; padding:20px; color:#999;">Chưa có dữ liệu</div>';
     };
