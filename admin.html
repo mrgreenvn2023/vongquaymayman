@@ -16,14 +16,11 @@
         .header-panel { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 2px solid #f1f4f8; padding-bottom: 20px;}
         .user-greeting { display: flex; align-items: center; gap: 10px; background: #f8f9fa; padding: 8px 15px; border-radius: 50px; border: 1px solid #e9ecef; font-weight: 600;}
         .user-avatar { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid #0054a6;}
-        
-        /* CSS Làm Nút Gọn Lại */
         .btn-group { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 25px; }
         .btn { font-family: 'Nunito', sans-serif; background: #0054a6; color: white; border: none; padding: 10px 20px; font-weight: 700; font-size: 14px; border-radius: 8px; cursor: pointer; transition: all 0.3s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: auto; box-shadow: 0 3px 6px rgba(0,0,0,0.1);}
         .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 12px rgba(0,0,0,0.15);}
         .btn-danger { background: #dc3545; } .btn-success { background: #28a745; } .btn-warning { background: #ffc107; color: #000; } .btn-info { background: #17a2b8; }
-        
-        .btn-go-spin { background: linear-gradient(135deg, #11998e, #38ef7d); color: white; border: none; padding: 10px 20px; font-weight: 700; border-radius: 8px; cursor: margin-right: 10px; transition: 0.3s;}
+        .btn-go-spin { background: linear-gradient(135deg, #11998e, #38ef7d); color: white; border: none; padding: 10px 20px; font-weight: 700; border-radius: 8px; cursor: pointer; margin-right: 10px; transition: 0.3s;}
         .btn-logout { background: linear-gradient(135deg, #cb2d3e, #ef473a); color: white; border: none; padding: 10px 20px; font-weight: 700; border-radius: 8px; cursor: pointer; transition: 0.3s;}
         .tabs { display: flex; background: #f8f9fa; padding: 5px; border-radius: 12px; margin-bottom: 25px; gap: 5px; flex-wrap: wrap;}
         .tab-btn { flex: 1; padding: 12px; text-align: center; background: transparent; border: none; font-size: 14px; font-weight: 700; color: #6c757d; cursor: pointer; border-radius: 8px; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px;}
@@ -241,18 +238,15 @@
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwKZgN66DpkGr-4FAo9BcEt4xt8oHos-PWQInCm4G40mUgdGc5BtJiOXfnOdRud5XFGMw/exec";
     let allData = { stations: {}, history: [], accounts: [], sessions: {}, sysConfig: {} }; let currentUser = null;
     
-    // HỆ THỐNG AFK 10 PHÚT
     let afkTime = 0;
     function checkSessionAlive() { 
         let sessionUser = localStorage.getItem("tvu_admin_user"); let sessionTime = localStorage.getItem("tvu_admin_time"); let now = Date.now(); 
-        if (sessionUser && sessionTime && (now - parseInt(sessionTime) < 10 * 60 * 1000)) { 
-            currentUser = JSON.parse(sessionUser); localStorage.setItem("tvu_admin_time", now); return true; 
-        } 
+        if (sessionUser && sessionTime && (now - parseInt(sessionTime) < 10 * 60 * 1000)) { currentUser = JSON.parse(sessionUser); localStorage.setItem("tvu_admin_time", now); return true; } 
         localStorage.removeItem("tvu_admin_user"); localStorage.removeItem("tvu_admin_time"); return false; 
     }
     function resetAFK() { afkTime = 0; if(currentUser) localStorage.setItem("tvu_admin_time", Date.now()); }
     window.addEventListener('mousemove', resetAFK); window.addEventListener('keypress', resetAFK); window.addEventListener('click', resetAFK);
-    setInterval(() => { if(currentUser) { afkTime++; if(afkTime >= 600) logout(); } }, 1000); // 600s = 10 phút
+    setInterval(() => { if(currentUser) { afkTime++; if(afkTime >= 600) logout(); } }, 1000); 
 
     window.api = function(params, cb) { try { const callbackName = 'cb_' + Math.round(Math.random() * 1000000); const script = document.createElement('script'); let timeoutId = setTimeout(() => { if (window[callbackName]) { document.body.removeChild(script); delete window[callbackName]; Swal.fire("Lỗi", "Mạng Wifi yếu. Đổi 4G!", "error"); } }, 35000); window[callbackName] = function(data) { clearTimeout(timeoutId); if(script.parentNode) document.body.removeChild(script); delete window[callbackName]; if(data && data.error) Swal.fire("Lỗi", data.error, "error"); else cb(data); }; const qs = Object.keys(params).map(k => k + '=' + encodeURIComponent(params[k])).join('&'); script.src = SCRIPT_URL + (SCRIPT_URL.indexOf('?') >= 0 ? '&' : '?') + qs + '&callback=' + callbackName + '&t=' + Date.now(); document.body.appendChild(script); } catch(e) { alert("Lỗi: " + e.message); } };
     
@@ -276,8 +270,7 @@
         
         let locInput = document.getElementById('cfg-location'); let assignSelect = document.getElementById('cfg-assign-admin');
         if (currentUser.role === 'super') { 
-            document.getElementById('btn-tab-accounts').style.display = 'flex'; // <--- ĐÃ SỬA ID Ở ĐÂY CHO KHỚP HTML
-            document.getElementById('btn-tab-system').style.display = 'flex'; // <--- ĐÃ SỬA ID Ở ĐÂY CHO KHỚP HTML
+            document.getElementById('btn-tab-accounts').style.display = 'flex'; document.getElementById('btn-tab-system').style.display = 'flex'; 
             document.getElementById('assign-box').style.display = 'block'; document.getElementById('super-station-list-box').style.display = 'block'; document.getElementById('hist-location-filter').style.display = 'inline-block'; document.getElementById('btn-reset-all-stations').style.display = 'inline-block';
             locInput.readOnly = false; window.renderAccounts(); window.renderSysConfigUI(); 
             assignSelect.innerHTML = '<option value="' + currentUser.user + '">-- Tự phụ trách --</option>'; allData.accounts.forEach(acc => { if(acc.role !== 'super') assignSelect.innerHTML += `<option value="${acc.user}">${acc.fullName || acc.user}</option>`; }); 
@@ -289,10 +282,8 @@
         } 
         window.populateFilters();
         
-        // GHI NHỚ TAB KHI F5
         let activeTab = localStorage.getItem('tvu_active_tab') || 'tab-config';
-        let tabBtnId = 'btn-' + activeTab;
-        let btn = document.getElementById(tabBtnId);
+        let tabBtnId = 'btn-' + activeTab; let btn = document.getElementById(tabBtnId);
         if(btn) openTab(activeTab, btn); else openTab('tab-config', document.getElementById('btn-tab-config'));
     }
     
@@ -300,7 +291,7 @@
         document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active')); 
         document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active')); 
         document.getElementById(tabId).classList.add('active'); btn.classList.add('active'); 
-        localStorage.setItem('tvu_active_tab', tabId); // Lưu Tab
+        localStorage.setItem('tvu_active_tab', tabId); 
         if(tabId === 'tab-history') window.renderHistory(); if(tabId === 'tab-report') window.generateReport(); if(tabId === 'tab-data') window.renderRawData(); 
     };
 
@@ -318,8 +309,7 @@
         let st = allData.stations[locName]; 
         if (st) { 
             document.getElementById('cfg-expected').value = st.expectedStudents || 500; 
-            document.getElementById('cfg-station-avatar').value = st.avatar || "";
-            document.getElementById('station-avatar-preview').src = st.avatar || 'upload/image/logotvu.png';
+            document.getElementById('cfg-station-avatar').value = st.avatar || ""; document.getElementById('station-avatar-preview').src = st.avatar || 'upload/image/logotvu.png';
             let mode = st.calcMode || 'percent_manual'; if (mode.includes('percent')) { document.querySelector('input[name="calcType"][value="percent"]').checked = true; document.getElementById('cfg-mode-percent').value = mode; } else { document.querySelector('input[name="calcType"][value="multiplier"]').checked = true; document.getElementById('cfg-mode-multiplier').value = mode; } window.toggleCalcType(); window.renderConfig(st.rules || []); 
             if (currentUser.role === 'super') { let assignedUser = currentUser.user; for (let user in allData.sessions) { if (allData.sessions[user] === locName) { assignedUser = user; break; } } document.getElementById('cfg-assign-admin').value = assignedUser; } 
         } 
