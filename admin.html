@@ -14,15 +14,12 @@
         #login-box input:focus { border-color: #0054a6; outline: none; box-shadow: 0 0 0 3px rgba(0,84,166,0.1);}
         h2 { color: #0054a6; margin: 0 0 20px 0; font-weight: 800; font-size: 24px;}
         .header-panel { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 2px solid #f1f4f8; padding-bottom: 20px;}
-        
-        /* AVATAR ADMIN TO VÀ RÕ HƠN */
         .user-greeting { display: flex; align-items: center; gap: 12px; background: #f8f9fa; padding: 8px 20px; border-radius: 50px; border: 1px solid #e9ecef; font-weight: 600; font-size: 16px;}
         .user-avatar { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 3px solid #0054a6; box-shadow: 0 2px 8px rgba(0,84,166,0.3);}
-        
         .btn-group { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 25px; }
         .btn { font-family: 'Nunito', sans-serif; background: #0054a6; color: white; border: none; padding: 10px 20px; font-weight: 700; font-size: 14px; border-radius: 8px; cursor: pointer; transition: all 0.3s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: auto; box-shadow: 0 3px 6px rgba(0,0,0,0.1);}
         .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 12px rgba(0,0,0,0.15);}
-        .btn-danger { background: #dc3545; } .btn-success { background: #28a745; } .btn-warning { background: #ffc107; color: #000; } .btn-info { background: #17a2b8; }
+        .btn-danger { background: #dc3545; } .btn-success { background: #28a745; } .btn-warning { background: #ffc107; color: #000; } .btn-info { background: #17a2b8; } .btn-secondary { background: #6c757d; cursor: not-allowed; }
         .btn-go-spin { background: linear-gradient(135deg, #11998e, #38ef7d); color: white; border: none; padding: 10px 20px; font-weight: 700; border-radius: 8px; cursor: pointer; margin-right: 10px; transition: 0.3s;}
         .btn-logout { background: linear-gradient(135deg, #cb2d3e, #ef473a); color: white; border: none; padding: 10px 20px; font-weight: 700; border-radius: 8px; cursor: pointer; transition: 0.3s;}
         .tabs { display: flex; background: #f8f9fa; padding: 5px; border-radius: 12px; margin-bottom: 25px; gap: 5px; flex-wrap: wrap;}
@@ -142,6 +139,10 @@
             </div>
         </div>
         
+        <div style="background: #fff5f5; border: 1px dashed #dc3545; padding: 10px 15px; border-radius: 8px; margin-bottom: 15px; font-size: 13px;">
+            <i class="fas fa-lightbulb" style="color:#dc3545;"></i> <b>MẸO:</b> Bạn có thể copy <b>Link chia sẻ của Google Drive</b> dán trực tiếp vào ô Hình Ảnh. Hệ thống sẽ tự chuyển hóa thành ảnh!
+        </div>
+
         <div style="font-weight: 800; display: flex; padding: 0 15px; color: #6c757d; margin-bottom: 10px; font-size:13px; text-transform: uppercase;"><div style="flex:1.5;">Tên Món Quà</div><div style="flex:1.5; text-align:center;">Hình Ảnh</div><div style="flex:0.6; text-align:center;">SL Tồn</div><div id="col-mul" style="flex:1; text-align:center; color:#0054a6; display: none;">Bội số</div><div id="col-pct" style="flex:1; text-align:center; color:#e84393; display: block;">Tỉ lệ (%)</div><div style="flex:0.3;"></div></div>
         <div id="cfg-prizes"></div>
         <div id="lose-rate-container"><i class="fas fa-info-circle"></i> Tỉ lệ rơi vào ô [Chưa trúng thưởng]: <span id="lose-rate-val">0</span>%</div>
@@ -313,33 +314,16 @@
         if(tabId === 'tab-history') window.renderHistory(); if(tabId === 'tab-report') window.generateReport(); if(tabId === 'tab-data') window.renderRawData(); 
     };
 
-    // BỘ LỌC ĐA TẦNG CHO ADMIN
     window.populateFilters = function() { 
-        let hLoc = document.getElementById('hist-location-filter'); 
-        let rLoc = document.getElementById('rep-location'); 
-        let rAdm = document.getElementById('rep-admin'); 
-        let dLoc = document.getElementById('data-filter-loc');
-        let dPrize = document.getElementById('data-filter-prize');
-        
-        let prizesSet = new Set();
-        
-        if(hLoc) hLoc.innerHTML = '<option value="">-- Tất cả Địa điểm --</option>';
-        if(rLoc) rLoc.innerHTML = '<option value="">-- Tất cả Địa điểm --</option>';
-        if(dLoc) dLoc.innerHTML = '<option value="">-- Tất cả Trạm --</option>';
-        
+        let hLoc = document.getElementById('hist-location-filter'); let rLoc = document.getElementById('rep-location'); let rAdm = document.getElementById('rep-admin'); 
+        let dLoc = document.getElementById('data-filter-loc'); let dPrize = document.getElementById('data-filter-prize'); let prizesSet = new Set();
+        if(hLoc) hLoc.innerHTML = '<option value="">-- Tất cả Địa điểm --</option>'; if(rLoc) rLoc.innerHTML = '<option value="">-- Tất cả Địa điểm --</option>'; if(dLoc) dLoc.innerHTML = '<option value="">-- Tất cả Trạm --</option>';
         Object.keys(allData.stations).forEach(l => {
-            if(hLoc) hLoc.innerHTML += `<option value="${l}">${l}</option>`;
-            if(rLoc) rLoc.innerHTML += `<option value="${l}">${l}</option>`;
-            if(dLoc) dLoc.innerHTML += `<option value="${l}">${l}</option>`;
+            if(hLoc) hLoc.innerHTML += `<option value="${l}">${l}</option>`; if(rLoc) rLoc.innerHTML += `<option value="${l}">${l}</option>`; if(dLoc) dLoc.innerHTML += `<option value="${l}">${l}</option>`;
             if(allData.stations[l].rules) allData.stations[l].rules.forEach(r => prizesSet.add(r.name));
         }); 
-        
         if(rAdm) { rAdm.innerHTML = '<option value="">-- Tất cả Nhân viên --</option>'; allData.accounts.forEach(a => rAdm.innerHTML += `<option value="${a.user}">${a.fullName || a.user}</option>`); } 
-        
-        if(dPrize) {
-            dPrize.innerHTML = '<option value="">-- Tất cả Quà --</option><option value="May mắn lần sau">Chưa trúng thưởng</option>';
-            prizesSet.forEach(p => dPrize.innerHTML += `<option value="${p}">${p}</option>`);
-        }
+        if(dPrize) { dPrize.innerHTML = '<option value="">-- Tất cả Quà --</option><option value="May mắn lần sau">Chưa trúng thưởng</option>'; prizesSet.forEach(p => dPrize.innerHTML += `<option value="${p}">${p}</option>`); }
     };
 
     window.updateLoseRate = function() { let mode = window.getCurrentMode(); let loseRateContainer = document.getElementById('lose-rate-container'); if (mode.includes('percent')) { loseRateContainer.style.display = 'block'; let totalPct = 0; document.querySelectorAll('.p-percent').forEach(el => { totalPct += parseFloat(el.value) || 0; }); let loseRate = 100 - totalPct; if (loseRate < 0) loseRate = 0; document.getElementById('lose-rate-val').innerText = loseRate.toFixed(2); } else { loseRateContainer.style.display = 'none'; } };
@@ -363,7 +347,6 @@
     window.renderConfig = function(rules) { let html = ''; let mode = window.getCurrentMode(); let isPctMode = mode.includes('percent'); rules.forEach((rule, i) => { let rawImg = rule.image || 'logotvu.png'; let imgSrc = rawImg.startsWith('http') ? rawImg : 'upload/image/' + rawImg; let rateVal = isPctMode ? (rule.percent || 0) : (rule.mul || 0); html += `<div class="cfg-row prize-row"><input style="flex:1.5" type="text" class="p-name" value="${rule.name}"><div class="upload-area"><img id="prev_${i}" src="${imgSrc}" class="img-preview" onerror="this.src='upload/image/logotvu.png'"><input type="text" class="p-img" value="${rawImg}" placeholder="Dán Link GDrive hoặc Tải lên..." oninput="this.value = window.convertDriveLink(this.value); document.getElementById('prev_${i}').src=this.value"><input type="file" style="display:none" onchange="window.uploadFile(this, ${i})"><button type="button" class="btn btn-info" style="padding:8px 12px; width:auto;" onclick="this.previousElementSibling.click()"><i class="fas fa-upload"></i></button></div><input style="flex:0.8" type="number" class="p-qty" value="${rule.qty}" oninput="window.calculateAuto()"><input style="flex:1; color:#0054a6; font-weight:bold; display:none;" type="number" class="p-mul" value="${rule.mul || 0}"><input style="flex:1; color:#e84393; font-weight:bold; display:block;" type="number" step="any" class="p-percent" value="${rule.percent || 0}" oninput="window.balancePercentages(this)"><button type="button" class="btn btn-danger" style="flex:0.3; width:auto;" onclick="this.parentElement.remove(); window.updateLoseRate();"><i class="fas fa-trash-alt"></i></button></div>`; }); document.getElementById('cfg-prizes').innerHTML = html; window.toggleMode(); };
     window.addPrizeRow = function() { let i = document.querySelectorAll('.prize-row').length; document.getElementById('cfg-prizes').insertAdjacentHTML('beforeend', `<div class="cfg-row prize-row"><input style="flex:1.5" type="text" class="p-name" placeholder="Tên món quà"><div class="upload-area"><img id="prev_${i}" src="upload/image/logotvu.png" class="img-preview"><input type="text" class="p-img" placeholder="Dán Link GDrive hoặc Tải lên..." oninput="this.value = window.convertDriveLink(this.value); document.getElementById('prev_${i}').src=this.value"><input type="file" style="display:none" onchange="window.uploadFile(this, ${i})"><button type="button" class="btn btn-info" style="padding:8px 12px; width:auto;" onclick="this.previousElementSibling.click()"><i class="fas fa-upload"></i></button></div><input style="flex:0.8" type="number" class="p-qty" value="0" oninput="window.calculateAuto()"><input style="flex:1; color:#0054a6; font-weight:bold; display:none;" type="number" class="p-mul" value="0"><input style="flex:1; color:#e84393; font-weight:bold; display:block;" type="number" step="any" class="p-percent" value="0" oninput="window.balancePercentages(this)"><button type="button" class="btn btn-danger" style="flex:0.3; width:auto;" onclick="this.parentElement.remove(); window.updateLoseRate();"><i class="fas fa-trash-alt"></i></button></div>`); window.toggleMode(); };
     
-    // UPLOAD ẢNH BẰNG CATBOX.MOE SIÊU MƯỢT
     window.uploadSingleFile = function(input, targetInputId, targetPreviewId) {
         if (!input.files[0]) return; 
         let fd = new FormData(); fd.append("reqtype", "fileupload"); fd.append("fileToUpload", input.files[0]); 
@@ -389,12 +372,19 @@
     window.renderAccounts = function() { let html = ''; allData.accounts.forEach((acc, i) => { let id = Date.now() + i; let av = acc.avatar || "upload/image/logotvu.png"; html += `<div class="cfg-row acc-row"><input style="flex:1.2" type="text" class="a-fn" value="${acc.fullName||''}" placeholder="Họ tên thật"><input style="flex:1" type="text" class="a-u" value="${acc.user}" ${acc.user==='superadmin'?'readonly':''} placeholder="Tên đăng nhập"><input style="flex:1" type="text" class="a-p" value="${acc.pass}" placeholder="Mật khẩu"><select style="flex:0.8" class="a-r"><option value="admin" ${acc.role==='admin'?'selected':''}>Trạm Viên</option><option value="super" ${acc.role==='super'?'selected':''}>Tổng Quản</option></select><div style="flex:1; display:flex; gap:5px; align-items:center;"><img id="av_${id}" src="${av}" style="width:30px;height:30px;border-radius:50%;object-fit:cover;" onerror="this.src='upload/image/logotvu.png'"><input type="text" class="a-av" id="in_${id}" value="${av}" oninput="this.value = window.convertDriveLink(this.value); document.getElementById('av_${id}').src=this.value" placeholder="Dán Link GDrive hoặc Up" style="width:50px; font-size:10px;"><input type="file" id="f_${id}" style="display:none;" onchange="window.uploadSingleFile(this, 'in_${id}', 'av_${id}')"><button type="button" class="btn btn-info" style="padding:5px;" onclick="document.getElementById('f_${id}').click()"><i class="fas fa-upload"></i></button></div>${acc.user==='superadmin'?'':`<button type="button" class="btn btn-danger" style="width:auto;" onclick="this.parentElement.remove()"><i class="fas fa-trash"></i></button>`}</div>`; }); document.getElementById('cfg-accounts-list').innerHTML = html; };
     window.saveAccounts = function() { try { let accs = []; document.querySelectorAll('.acc-row').forEach(row => { let uElem = row.querySelector('.a-u'); if (uElem && uElem.value.trim() !== "") { let fn = row.querySelector('.a-fn') ? row.querySelector('.a-fn').value.trim() : ""; let p = row.querySelector('.a-p') ? row.querySelector('.a-p').value.trim() : ""; let r = row.querySelector('.a-r') ? row.querySelector('.a-r').value : "admin"; let av = row.querySelector('.a-av') ? row.querySelector('.a-av').value : ""; accs.push({ fullName: fn, user: uElem.value.trim(), pass: p, role: r, avatar: av }); } }); let hasSuper = false; for(let i=0; i<accs.length; i++) { if(accs[i].user === 'superadmin') hasSuper = true; } if(!hasSuper) { accs.unshift({ user: 'superadmin', pass: 'tvu@2026', role: 'super', fullName: 'Admin Tổng' }); } Swal.fire({title: 'Đang lưu...', didOpen: () => Swal.showLoading()}); api({ action: "saveAdmin", accounts: JSON.stringify(accs) }, () => { Swal.fire("Thành công!", "Đã cập nhật.", "success").then(()=>location.reload()); }); } catch(e) { alert(e.message); } };
     
-    // TÍNH NĂNG ĐỔI TRẠNG THÁI REAL-TIME UI
+    // ĐỔI TRẠNG THÁI REAL-TIME LIÊN THÔNG BỘ NHỚ
     window.toggleDeliveredUI = function(cb, rowId, histIdx) {
         let badge = document.getElementById(`badge-${rowId}-${histIdx}`);
         if(badge) {
             if(cb.checked) { badge.className = 'badge bg-success status-badge-indicator'; badge.innerText = 'Đã phát'; }
             else { badge.className = 'badge bg-warning status-badge-indicator'; badge.innerText = 'Chưa phát'; }
+        }
+        let rowObj = allData.history.find(r => r.row == rowId);
+        if(rowObj && rowObj.spinHistory && rowObj.spinHistory[histIdx]) {
+            rowObj.spinHistory[histIdx].delivered = cb.checked;
+            let hasWon = false; let allDelivered = true;
+            rowObj.spinHistory.forEach(h => { if (h.prize && h.prize !== 'May mắn lần sau' && h.prize !== 'Chưa có') { hasWon = true; if (!h.delivered) allDelivered = false; } });
+            rowObj.delivered = hasWon ? allDelivered : false;
         }
     };
     
@@ -406,7 +396,21 @@
     window.restoreRow = function(rowId) { Swal.fire({title: 'Nhập Pass Super Admin để Phục Hồi', input: 'password', showCancelButton: true, confirmButtonColor: '#28a745'}).then(r => { if(r.isConfirmed) { if(r.value !== currentUser.pass) return Swal.fire("Lỗi", "Sai mật khẩu", "error"); Swal.fire({title: 'Đang phục hồi...', didOpen:()=>Swal.showLoading()}); api({action:'restoreRow', row: rowId}, ()=>location.reload()); }}); }
     window.clearAllHistory = function() { Swal.fire({ title: 'ĐƯA TẤT CẢ VÀO THÙNG RÁC?', text: "Nhập pass Super Admin:", input: 'password', icon: 'warning', showCancelButton: true, confirmButtonColor: '#dc3545' }).then((result) => { if (result.isConfirmed) { if(result.value !== currentUser.pass) return Swal.fire("Lỗi", "Sai mật khẩu", "error"); Swal.fire({title: 'Đang xóa...', didOpen: () => Swal.showLoading()}); api({ action: "clearAllHistory", adminUser: currentUser.user }, () => { location.reload(); }); } }); };
 
-    window.grantMission = function(phone) { Swal.fire({ title: 'Tặng lượt cho thí sinh', html: 'Hoàn thành mỗi nhiệm vụ nhận 1 lượt quay.', input: 'select', inputOptions: { '1': 'Tặng 1 Lượt (1 Nhiệm vụ)', '2': 'Tặng 2 Lượt (2 Nhiệm vụ)', '3': 'Tặng 3 Lượt (3 Nhiệm vụ)' }, showCancelButton: true, confirmButtonText: 'Xác nhận tặng', confirmButtonColor: '#0054a6' }).then(res => { if(res.isConfirmed) { Swal.fire({title: 'Đang xử lý...', allowOutsideClick: false, didOpen: () => Swal.showLoading()}); api({action: 'enableMission', targetPhone: phone, numMissions: res.value}, (resp) => { if(resp.error) return Swal.fire("Lỗi", resp.error, "error"); Swal.fire('Thành công', 'Đã tặng lượt!', 'success'); }); } }); };
+    // TẶNG NHIỆM VỤ LEO THÁP (1 -> 2 -> 3)
+    window.grantMission = function(phone) { 
+        Swal.fire({ title: 'Tặng Lượt Quay', text: 'Hệ thống sẽ mở khóa nhiệm vụ tiếp theo cho thí sinh này.', icon: 'info', showCancelButton: true, confirmButtonText: 'Tặng Ngay', confirmButtonColor: '#0054a6' }).then(res => { 
+            if(res.isConfirmed) { 
+                Swal.fire({title: 'Đang xử lý...', allowOutsideClick: false, didOpen: () => Swal.showLoading()}); 
+                api({action: 'enableMission', targetPhone: phone}, (resp) => { 
+                    if(resp.error) return Swal.fire("Lỗi", resp.error, "error"); 
+                    let rowObj = allData.history.find(r => r.phone === phone);
+                    if(rowObj) rowObj.mission = resp.mData;
+                    window.renderHistory();
+                    Swal.fire('Thành công', 'Đã cấp nhiệm vụ tiếp theo!', 'success'); 
+                }); 
+            } 
+        }); 
+    };
 
     window.renderHistory = function() {
         let locFilter = ''; if(currentUser.role === 'super') { locFilter = document.getElementById('hist-location-filter').value; document.getElementById('hist-station-label').innerText = "Tất cả dữ liệu"; } else { locFilter = allData.sessions[currentUser.user]; document.getElementById('hist-station-label').innerText = "Trạm của bạn: " + (locFilter || "Chưa chọn"); }
@@ -419,8 +423,19 @@
             let wins = row.spinHistory ? row.spinHistory.filter(h => h.prize && h.prize !== 'May mắn lần sau' && h.prize !== 'Chưa có') : [];
             let hasWon = wins.length > 0; let statusBadge = ''; let missionBtn = ''; let prizeDisplay = '';
             
+            // Xử lý nút Tặng lượt leo tháp
             if (!hasWon) { 
-                missionBtn = `<button class="btn btn-warning" onclick="window.grantMission('${row.phone}')"><i class="fas fa-gift"></i> Tặng lượt</button>`; 
+                let mData = {granted: 0, completed: 0};
+                try { mData = typeof row.mission === 'string' ? JSON.parse(row.mission) : row.mission; } catch(e) {}
+                if(!mData) mData = {granted: 0, completed: 0};
+                
+                if(mData.granted >= 3 && mData.completed >= 3) {
+                    missionBtn = `<button class="btn btn-secondary" disabled><i class="fas fa-ban"></i> Đã làm 3/3 NV</button>`;
+                } else if(mData.granted > mData.completed) {
+                    missionBtn = `<button class="btn btn-secondary" disabled><i class="fas fa-spinner fa-spin"></i> Đang làm NV ${mData.granted}</button>`;
+                } else {
+                    missionBtn = `<button class="btn btn-warning" onclick="window.grantMission('${row.phone}')"><i class="fas fa-gift"></i> Tặng NV ${mData.granted + 1}</button>`;
+                }
                 prizeDisplay = `<span style="color:#6c757d; font-weight:bold;">Chưa trúng thưởng</span>`;
             } else { 
                 prizeDisplay = `<div style="display:flex; flex-direction:column; gap:5px;">`;
@@ -436,71 +451,39 @@
         document.getElementById('hist-list').innerHTML = html || '<div style="text-align:center; padding:20px; color:#999;">Chưa có dữ liệu</div>';
     };
 
-    // HÀM LẤY DỮ LIỆU ĐÃ QUA BỘ LỌC ĐỂ IN VÀ XUẤT EXCEL
     window.getFilteredRawData = function() {
-        let dDate = document.getElementById('data-filter-date').value;
-        let dLoc = document.getElementById('data-filter-loc').value;
-        let dPrize = document.getElementById('data-filter-prize').value;
-        let dStatus = document.getElementById('data-filter-status').value;
-        let showTrash = document.getElementById('show-trash-cb').checked;
-
+        let dDate = document.getElementById('data-filter-date').value; let dLoc = document.getElementById('data-filter-loc').value; let dPrize = document.getElementById('data-filter-prize').value; let dStatus = document.getElementById('data-filter-status').value; let showTrash = document.getElementById('show-trash-cb').checked;
         return allData.history.filter(w => {
             if (!showTrash && w.isDeleted) return false; if (showTrash && !w.isDeleted) return false; 
             if (currentUser.role !== 'super' && w.admin !== currentUser.user) return false; 
-            
             let wDate = w.time ? new Date(w.time).toISOString().split('T')[0] : "";
-            if (dDate && wDate !== dDate) return false;
-            if (dLoc && w.location !== dLoc) return false;
-            
+            if (dDate && wDate !== dDate) return false; if (dLoc && w.location !== dLoc) return false;
             let hasWon = (w.prize && w.prize !== 'May mắn lần sau' && w.prize !== 'Chưa có');
-            if (dStatus === 'win' && !hasWon) return false;
-            if (dStatus === 'lose' && hasWon) return false;
-            
-            if (dPrize) {
-                if (dPrize === 'May mắn lần sau') { if (hasWon) return false; } 
-                else { if (!w.prize || !w.prize.includes(dPrize)) return false; }
-            }
-            return true;
+            if (dStatus === 'win' && !hasWon) return false; if (dStatus === 'lose' && hasWon) return false;
+            if (dPrize) { if (dPrize === 'May mắn lần sau') { if (hasWon) return false; } else { if (!w.prize || !w.prize.includes(dPrize)) return false; } } return true;
         });
     };
 
     window.printData = function() { 
-        let dataToPrint = window.getFilteredRawData();
-        if(dataToPrint.length === 0) return Swal.fire("Thông báo", "Chưa có dữ liệu nào khớp với bộ lọc để in!", "info"); 
-        let printWindow = window.open('', '_blank'); 
-        let html = `<!DOCTYPE html><html><head><title>Bảng Kê Danh Sách - TVU</title><style>@page { size: A4 landscape; margin: 15mm; } body { font-family: sans-serif; } table { width: 100%; border-collapse: collapse; font-size: 13px; } th { background: #0054a6; color: #fff; padding: 10px; border: 1px solid #000; } td { border: 1px solid #000; padding: 8px; }</style></head><body><h2>BẢNG KÊ DANH SÁCH THAM GIA</h2><table><thead><tr><th>STT</th><th>Thời Gian</th><th>SĐT</th><th>Họ Tên</th><th>Trường</th><th>Quà Trúng (Chi tiết)</th><th>Ký Nhận</th></tr></thead><tbody>`; 
-        let count = 1; dataToPrint.forEach(row => { 
-            let timeStr = row.time ? new Date(row.time).toLocaleString('vi-VN') : ""; 
-            let pText = row.prize === 'May mắn lần sau' ? 'Chưa trúng thưởng' : row.prize;
-            html += `<tr><td align="center">${count++}</td><td>${timeStr}</td><td>${row.phone}</td><td>${row.name}</td><td>${row.school}</td><td><b>${pText}</b></td><td></td></tr>`; 
-        }); 
-        html += `</tbody></table></body></html>`; printWindow.document.write(html); printWindow.document.close(); setTimeout(() => { printWindow.print(); }, 500); 
+        let dataToPrint = window.getFilteredRawData(); if(dataToPrint.length === 0) return Swal.fire("Thông báo", "Chưa có dữ liệu nào khớp với bộ lọc để in!", "info"); 
+        let printWindow = window.open('', '_blank'); let html = `<!DOCTYPE html><html><head><title>Bảng Kê Danh Sách - TVU</title><style>@page { size: A4 landscape; margin: 15mm; } body { font-family: sans-serif; } table { width: 100%; border-collapse: collapse; font-size: 13px; } th { background: #0054a6; color: #fff; padding: 10px; border: 1px solid #000; } td { border: 1px solid #000; padding: 8px; }</style></head><body><h2>BẢNG KÊ DANH SÁCH THAM GIA</h2><table><thead><tr><th>STT</th><th>Thời Gian</th><th>SĐT</th><th>Họ Tên</th><th>Trường</th><th>Quà Trúng (Chi tiết)</th><th>Ký Nhận</th></tr></thead><tbody>`; 
+        let count = 1; dataToPrint.forEach(row => { let timeStr = row.time ? new Date(row.time).toLocaleString('vi-VN') : ""; let pText = row.prize === 'May mắn lần sau' ? 'Chưa trúng thưởng' : row.prize; html += `<tr><td align="center">${count++}</td><td>${timeStr}</td><td>${row.phone}</td><td>${row.name}</td><td>${row.school}</td><td><b>${pText}</b></td><td></td></tr>`; }); html += `</tbody></table></body></html>`; printWindow.document.write(html); printWindow.document.close(); setTimeout(() => { printWindow.print(); }, 500); 
     };
 
     window.exportCSV = function() { 
-        let dataToExport = window.getFilteredRawData();
-        let csv = "data:text/csv;charset=utf-8,\uFEFFHàng,Thời Gian,Số Điện Thoại,Họ Tên,Email,Trường,Địa Điểm,Nhân Viên Trực,Quà Trúng,Trạng Thái\n"; 
-        dataToExport.forEach(row => { 
-            let hasWon = (row.prize && row.prize !== 'May mắn lần sau' && row.prize !== 'Chưa có'); 
-            let status = row.delivered ? "Đã trao hết" : (hasWon ? "Chưa trao hết" : "-"); 
-            let timeStr = row.time ? new Date(row.time).toLocaleString('vi-VN') : ""; 
-            let pText = row.prize === 'May mắn lần sau' ? 'Chưa trúng thưởng' : row.prize; 
-            csv += `"${row.row}","${timeStr}","'${row.phone}","${row.name}","${row.email || ''}","${row.school}","${row.location}","${row.admin}","${pText}","${status}"\n`; 
-        }); 
+        let dataToExport = window.getFilteredRawData(); let csv = "data:text/csv;charset=utf-8,\uFEFFHàng,Thời Gian,Số Điện Thoại,Họ Tên,Email,Trường,Địa Điểm,Nhân Viên Trực,Quà Trúng,Trạng Thái\n"; 
+        dataToExport.forEach(row => { let hasWon = (row.prize && row.prize !== 'May mắn lần sau' && row.prize !== 'Chưa có'); let status = row.delivered ? "Đã trao hết" : (hasWon ? "Chưa trao hết" : "-"); let timeStr = row.time ? new Date(row.time).toLocaleString('vi-VN') : ""; let pText = row.prize === 'May mắn lần sau' ? 'Chưa trúng thưởng' : row.prize; csv += `"${row.row}","${timeStr}","'${row.phone}","${row.name}","${row.email || ''}","${row.school}","${row.location}","${row.admin}","${pText}","${status}"\n`; }); 
         const link = document.createElement("a"); link.setAttribute("href", encodeURI(csv)); link.setAttribute("download", "DanhSach_VongQuay_DaLoc.csv"); document.body.appendChild(link); link.click(); document.body.removeChild(link); 
     };
 
     window.generateReport = function() { let l = document.getElementById('rep-location').value, a = document.getElementById('rep-admin').value, d = document.getElementById('rep-date').value; let tWin = 0, tGiven = 0; let allTimeWonCount = {}; allData.history.forEach(w => { if(w.isDeleted) return; if(w.prize && w.prize !== "May mắn lần sau" && w.prize !== "Chưa có") { let wins = w.spinHistory ? w.spinHistory.filter(h => h.prize && h.prize !== 'May mắn lần sau' && h.prize !== 'Chưa có') : []; wins.forEach(h => { let k = w.location + '|||' + h.prize; allTimeWonCount[k] = (allTimeWonCount[k] || 0) + 1; }); } }); let statsMap = {}; for (let loc in allData.stations) { let st = allData.stations[loc]; if (st && st.isClosed === true) { if (l && loc !== l) continue; let adminUser = st.closedBy || st.admin; if (!adminUser) { let hRow = allData.history.find(w => w.location === loc); if (hRow) adminUser = hRow.admin; } adminUser = adminUser || "Không rõ"; let accInfo = allData.accounts.find(acc => acc.user === adminUser); let adminFullName = accInfo ? (accInfo.fullName || adminUser) : adminUser; if (st.rules) { st.rules.forEach(r => { let k = loc + '|||' + r.name; statsMap[k] = { loc: loc, admin: adminFullName, name: r.name, ton: parseInt(r.qty)||0, tongDemDi: (parseInt(r.qty)||0) + (allTimeWonCount[k] || 0), daTrung: 0, daGiao: 0 }; }); } } } allData.history.forEach(w => { if(w.isDeleted) return; if (currentUser.role !== 'super' && w.admin !== currentUser.user) return; let st = allData.stations[w.location]; if (!st || st.isClosed !== true) return; let date = w.time ? new Date(w.time).toISOString().split('T')[0] : ""; if ((!l || w.location === l) && (!a || w.admin === a) && (!d || date === d)) { let wins = w.spinHistory ? w.spinHistory.filter(h => h.prize && h.prize !== 'May mắn lần sau' && h.prize !== 'Chưa có') : []; wins.forEach(h => { tWin++; if(h.delivered) tGiven++; let k = w.location + '|||' + h.prize; if(statsMap[k]) { statsMap[k].daTrung++; if(h.delivered) statsMap[k].daGiao++; } }); } }); document.getElementById('rep-total').innerText = tWin; document.getElementById('rep-given').innerText = tGiven; document.getElementById('rep-not-given').innerText = tWin - tGiven; let htmlDetail = ''; for (let key in statsMap) { let item = statsMap[key]; if (item.tongDemDi > 0 || item.daTrung > 0) { htmlDetail += `<tr><td><b>${item.loc}</b></td><td><span style="color:#e84393; font-weight:bold;">${item.admin}</span></td><td><span class="badge bg-info">${item.name}</span></td><td style="font-weight:bold;">${item.tongDemDi}</td><td><span class="badge bg-warning">${item.daTrung}</span></td><td><span class="badge bg-success">${item.daGiao}</span></td><td><span class="badge bg-secondary">${item.ton}</span></td></tr>`; } } document.getElementById('report-detail-tbody').innerHTML = htmlDetail || '<tr><td colspan="7" style="text-align:center;">Trạm chưa chốt sổ.</td></tr>'; };
     
-    // RENDER DS HS (SỬ DỤNG BỘ LỌC)
     window.renderRawData = function() { 
-        let html = ''; 
-        let filteredData = window.getFilteredRawData();
-        
+        let html = ''; let filteredData = window.getFilteredRawData();
         filteredData.forEach((w, index) => { 
             let st = allData.stations[w.location]; let isClosedText = (st && st.isClosed) ? '<i class="fas fa-lock" style="color:red;" title="Đã Chốt"></i> ' : '<i class="fas fa-spinner fa-spin" style="color:green;" title="Đang chạy"></i> '; 
             let hasWon = (w.prize && w.prize !== 'May mắn lần sau' && w.prize !== 'Chưa có');
-            let statusBadge = w.delivered ? '<span class="badge bg-success">Đã Trao</span>' : (hasWon ? '<span class="badge bg-warning">Chưa Trao Hết</span>' : '<span class="badge bg-secondary">-</span>'); 
+            let statusBadge = w.delivered ? '<span class="badge bg-success">Đã Trao Hết</span>' : (hasWon ? '<span class="badge bg-warning">Chưa Trao Hết</span>' : '<span class="badge bg-secondary">-</span>'); 
             let pText = w.prize === 'May mắn lần sau' ? 'Chưa trúng thưởng' : w.prize; let timeStr = new Date(w.time).toLocaleString('vi-VN'); 
             let av = `<img src="${w.avatar || 'upload/image/logotvu.png'}" onerror="this.src='upload/image/logotvu.png'" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:1px solid #ced4da;">`;
             let actionBtn = w.isDeleted ? `<button class="btn btn-success" style="padding:4px 8px;font-size:11px;" onclick="window.restoreRow(${w.row})"><i class="fas fa-undo"></i></button>` : `<button class="btn btn-danger" style="padding:4px 8px;font-size:11px;" onclick="window.softDelete(${w.row})"><i class="fas fa-trash"></i></button>`;
