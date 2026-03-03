@@ -74,7 +74,7 @@
             <h3 class="event-title">VÒNG QUAY MAY MẮN</h3>
         </div>
         
-        <div id="auth-box">
+        <div id="auth-box" onkeypress="if(event.key === 'Enter') handleAuth()">
             <select id="user-location" onchange="loadStationConfig()"><option value="">-- CHỌN ĐỊA ĐIỂM SỰ KIỆN (*) --</option></select>
             <input type="tel" id="phone" placeholder="Số điện thoại cá nhân (*)" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, ''); if(this.value.length === 1 && this.value !== '0') this.value = '';">
             <input type="text" id="name" placeholder="Họ và tên (*)">
@@ -165,7 +165,6 @@
         });
     }
 
-    // UPLOAD AVATAR VÀO BÊN TRONG GAME
     function uploadAvatar(input) {
         if (!input.files[0]) return; 
         let apiKey = window.sysConfig ? window.sysConfig.imgbbKey : ""; 
@@ -182,9 +181,7 @@
                 api({ action: "updateAvatar", phone: user.phone, avatar: newAvatarUrl }, (res) => {
                     Swal.close();
                     if(res.status === 'success') {
-                        user.avatar = newAvatarUrl;
-                        localStorage.setItem('tvu_user_session', JSON.stringify(user));
-                        renderUser();
+                        user.avatar = newAvatarUrl; localStorage.setItem('tvu_user_session', JSON.stringify(user)); renderUser();
                         Swal.fire({icon: 'success', title: 'Cập nhật ảnh thành công!', timer: 1500, showConfirmButton: false});
                     } else { Swal.fire("Lỗi", "Không thể lưu ảnh vào máy chủ", "error"); }
                 });
@@ -268,7 +265,7 @@
         Swal.fire({title: 'Đang ghi danh...', allowOutsideClick: false, didOpen: () => Swal.showLoading()});
         api({ action: "auth", phone: ph, name: n, school: s, location: loc, email: em, avatar: "logotvu.png" }, (res) => {
             Swal.close(); 
-            if(res.error) return Swal.fire("Lỗi Đăng Ký", res.error, "error"); // Đã bắt lỗi khóa chéo Email SĐT ở đây
+            if(res.error) return Swal.fire("Lỗi Đăng Ký", res.error, "error"); 
             user = res; user.location = loc; localStorage.setItem('tvu_user_session', JSON.stringify(user)); resetAFK();
             document.getElementById('admin-link-btn').style.display = 'none'; document.getElementById('auth-box').style.display = 'none'; document.getElementById('game-box').style.display = 'block';
             renderUser(); startPolling(); 
