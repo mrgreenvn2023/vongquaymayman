@@ -14,8 +14,11 @@
         #login-box input:focus { border-color: #0054a6; outline: none; box-shadow: 0 0 0 3px rgba(0,84,166,0.1);}
         h2 { color: #0054a6; margin: 0 0 20px 0; font-weight: 800; font-size: 24px;}
         .header-panel { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 2px solid #f1f4f8; padding-bottom: 20px;}
-        .user-greeting { display: flex; align-items: center; gap: 10px; background: #f8f9fa; padding: 8px 15px; border-radius: 50px; border: 1px solid #e9ecef; font-weight: 600;}
-        .user-avatar { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid #0054a6;}
+        
+        /* AVATAR ADMIN TO VÀ RÕ HƠN */
+        .user-greeting { display: flex; align-items: center; gap: 12px; background: #f8f9fa; padding: 8px 20px; border-radius: 50px; border: 1px solid #e9ecef; font-weight: 600; font-size: 16px;}
+        .user-avatar { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 3px solid #0054a6; box-shadow: 0 2px 8px rgba(0,84,166,0.3);}
+        
         .btn-group { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 25px; }
         .btn { font-family: 'Nunito', sans-serif; background: #0054a6; color: white; border: none; padding: 10px 20px; font-weight: 700; font-size: 14px; border-radius: 8px; cursor: pointer; transition: all 0.3s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: auto; box-shadow: 0 3px 6px rgba(0,0,0,0.1);}
         .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 12px rgba(0,0,0,0.15);}
@@ -44,7 +47,7 @@
         .card-blue { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
         .card-green { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); }
         .card-orange { background: linear-gradient(135deg, #f2994a 0%, #f2c94c 100%); }
-        .filter-box { display: flex; gap: 15px; margin-bottom: 25px; background: #f8f9fa; padding: 20px; border-radius: 12px; align-items: center; border: 1px solid #e1e8ed;}
+        .filter-box { display: flex; gap: 15px; margin-bottom: 25px; background: #f8f9fa; padding: 20px; border-radius: 12px; align-items: center; border: 1px solid #e1e8ed; flex-wrap: wrap;}
         .filter-box select, .filter-box input { padding: 10px 15px; border-radius: 8px; border: 1px solid #ced4da; font-family: 'Nunito', sans-serif;}
         .winner-row { background: #fff; border: 1px solid #e1e8ed; border-left: 5px solid #0054a6; margin-bottom: 12px; padding: 15px; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; gap:15px;}
         .winner-row.deleted { border-left-color: #dc3545; opacity: 0.7; background: #fff5f5; }
@@ -53,9 +56,10 @@
         .data-table { width: 100%; border-collapse: collapse; font-size: 14px; background: #fff; text-align: left; }
         .data-table th, .data-table td { padding: 12px 15px; border-bottom: 1px solid #e1e8ed; }
         .data-table th { background: #f8f9fa; color: #0054a6; font-weight: 800; position: sticky; top: 0; z-index: 10; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px;}
-        .badge { padding: 5px 10px; border-radius: 20px; font-size: 12px; font-weight: 800; display: inline-block; min-width: 60px; text-align: center;}
+        .badge { padding: 5px 10px; border-radius: 20px; font-size: 12px; font-weight: 800; display: inline-block; min-width: 60px; text-align: center; transition: 0.3s;}
         .bg-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb;}
         .bg-warning { background: #fff3cd; color: #856404; border: 1px solid #ffeeba;}
+        .bg-secondary { background: #e2e3e5; color: #383d41; border: 1px solid #d6d8db;}
         #lose-rate-container { text-align: right; padding: 12px 15px; font-size: 14px; background: #ffebee; border: 1px dashed #dc3545; border-radius: 8px; margin-top: 10px; color: #c0392b; font-weight: bold; display: none; }
         #admin-panel { display: none; }
         .mission-group { background: #f8f9fa; border: 1px solid #e1e8ed; padding: 15px; border-radius: 10px; margin-bottom: 10px;}
@@ -104,7 +108,7 @@
             <label style="font-weight:800; color:#0054a6; font-size:16px;"><i class="fas fa-map-marked-alt"></i> CẤU HÌNH TRẠM HIỆN TẠI</label>
             
             <div style="display: flex; gap: 15px; margin-top: 15px; align-items: center; background: #f8f9fa; padding: 15px; border-radius: 10px;">
-                <img id="station-avatar-preview" src="upload/image/logotvu.png" style="width: 60px; height: 60px; border-radius: 10px; object-fit: cover; border: 2px solid #ced4da;">
+                <img id="station-avatar-preview" src="upload/image/logotvu.png" style="width: 60px; height: 60px; border-radius: 10px; object-fit: cover; border: 2px solid #ced4da;" onerror="this.src='upload/image/logotvu.png'">
                 <div style="flex:1;">
                     <label style="font-size:13px; font-weight:bold; color:#555;">Ảnh Đại Diện Trạm (Tùy chọn):</label>
                     <div style="display:flex; gap:10px;">
@@ -138,13 +142,9 @@
             </div>
         </div>
         
-        <div style="background: #fff5f5; border: 1px dashed #dc3545; padding: 10px 15px; border-radius: 8px; margin-bottom: 15px; font-size: 13px;">
-            <i class="fas fa-lightbulb" style="color:#dc3545;"></i> <b>MẸO:</b> Bạn có thể copy <b>Link chia sẻ của Google Drive</b> dán trực tiếp vào ô Hình Ảnh. Hệ thống sẽ tự chuyển hóa thành ảnh!
-        </div>
-
         <div style="font-weight: 800; display: flex; padding: 0 15px; color: #6c757d; margin-bottom: 10px; font-size:13px; text-transform: uppercase;"><div style="flex:1.5;">Tên Món Quà</div><div style="flex:1.5; text-align:center;">Hình Ảnh</div><div style="flex:0.6; text-align:center;">SL Tồn</div><div id="col-mul" style="flex:1; text-align:center; color:#0054a6; display: none;">Bội số</div><div id="col-pct" style="flex:1; text-align:center; color:#e84393; display: block;">Tỉ lệ (%)</div><div style="flex:0.3;"></div></div>
         <div id="cfg-prizes"></div>
-        <div id="lose-rate-container"><i class="fas fa-info-circle"></i> Tỉ lệ rơi vào ô [May mắn lần sau]: <span id="lose-rate-val">0</span>%</div>
+        <div id="lose-rate-container"><i class="fas fa-info-circle"></i> Tỉ lệ rơi vào ô [Chưa trúng thưởng]: <span id="lose-rate-val">0</span>%</div>
         
         <div class="btn-group">
             <button type="button" class="btn btn-info" onclick="loadDefaultTemplate()"><i class="fas fa-download"></i> Tải Quà Mặc Định</button>
@@ -188,10 +188,21 @@
     </div>
 
     <div id="tab-data" class="tab-content">
+        <div class="filter-box" style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px;">
+            <input type="date" id="data-filter-date" onchange="window.renderRawData()">
+            <select id="data-filter-loc" onchange="window.renderRawData()"><option value="">-- Tất cả Trạm --</option></select>
+            <select id="data-filter-prize" onchange="window.renderRawData()"><option value="">-- Tất cả Quà --</option><option value="May mắn lần sau">Chưa trúng thưởng</option></select>
+            <select id="data-filter-status" onchange="window.renderRawData()">
+                <option value="">-- Tất cả Trạng thái --</option>
+                <option value="win">Đã trúng thưởng (Tất cả)</option>
+                <option value="lose">Chưa trúng thưởng</option>
+            </select>
+        </div>
+
         <div style="display:flex; justify-content:space-between; margin-bottom:15px; gap: 10px; align-items:center;">
             <div style="display:flex; gap:10px;">
-                <button class="btn btn-success" onclick="window.exportCSV()"><i class="fas fa-file-excel"></i> Xuất Excel</button>
-                <button class="btn btn-info" onclick="window.printData()"><i class="fas fa-print"></i> In Bảng Kê</button>
+                <button class="btn btn-success" onclick="window.exportCSV()"><i class="fas fa-file-excel"></i> Xuất Excel (Đã Lọc)</button>
+                <button class="btn btn-info" onclick="window.printData()"><i class="fas fa-print"></i> In Bảng Kê (Đã Lọc)</button>
             </div>
             <div style="display:flex; gap:10px; align-items:center;">
                 <label style="font-weight:bold; color:#dc3545; cursor:pointer;"><input type="checkbox" id="show-trash-cb" onchange="window.renderRawData()"> Hiện Thùng Rác</label>
@@ -218,6 +229,13 @@
     </div>
 
     <div id="tab-system" class="tab-content">
+        <div style="background:#fff; border: 1px solid #e1e8ed; border-radius:15px; padding:20px; margin-bottom:20px; border-left: 5px solid #e84393;">
+            <h3 style="color:#e84393; border-bottom:2px dashed #eee; padding-bottom:10px; margin-top:0;"><i class="fas fa-cloud-upload-alt"></i> Máy chủ ảnh Catbox</h3>
+            <div class="sys-row" style="margin-top:10px; display:none;">
+                <div style="flex:1;"><input type="text" id="sys-imgbb-key" placeholder="API Key ImgBB"></div>
+            </div>
+            <p style="font-size: 13px; color: #555;">Hệ thống hiện tại sử dụng máy chủ đám mây <b>Catbox.moe</b> ẩn danh, siêu tốc độ, không giới hạn dung lượng và <b>Hoàn toàn miễn phí 100%</b> (Không cần API Key).</p>
+        </div>
         <div style="background:#fff; border: 1px solid #e1e8ed; border-radius:15px; padding:20px; margin-bottom:20px;">
             <h3 style="color:#0054a6; border-bottom:2px dashed #eee; padding-bottom:10px; margin-top:0;"><i class="fas fa-list-ol"></i> Cấu Hình 3 Nhiệm Vụ Tặng Lượt</h3>
             <div class="mission-group"><h4><i class="fas fa-cube"></i> NHIỆM VỤ 1</h4><div class="sys-row"><div style="flex:1;"><input type="text" id="sys-m1-link" placeholder="Link..."></div><div style="flex:1;"><input type="text" id="sys-m1-text" placeholder="Hiển thị..."></div><div style="flex:0.5;"><select id="sys-m1-icon"><option value="fab fa-facebook">Facebook</option><option value="fab fa-tiktok">Tiktok</option><option value="fas fa-share">Share</option></select></div></div></div>
@@ -295,7 +313,35 @@
         if(tabId === 'tab-history') window.renderHistory(); if(tabId === 'tab-report') window.generateReport(); if(tabId === 'tab-data') window.renderRawData(); 
     };
 
-    window.populateFilters = function() { let hLoc = document.getElementById('hist-location-filter'); let rLoc = document.getElementById('rep-location'); let rAdm = document.getElementById('rep-admin'); if(hLoc) { hLoc.innerHTML = '<option value="">-- Tất cả Địa điểm --</option>'; Object.keys(allData.stations).forEach(l => hLoc.innerHTML += `<option value="${l}">${l}</option>`); } if(rLoc) { rLoc.innerHTML = '<option value="">-- Tất cả Địa điểm --</option>'; Object.keys(allData.stations).forEach(l => rLoc.innerHTML += `<option value="${l}">${l}</option>`); } if(rAdm) { rAdm.innerHTML = '<option value="">-- Tất cả Nhân viên --</option>'; allData.accounts.forEach(a => rAdm.innerHTML += `<option value="${a.user}">${a.fullName || a.user}</option>`); } };
+    // BỘ LỌC ĐA TẦNG CHO ADMIN
+    window.populateFilters = function() { 
+        let hLoc = document.getElementById('hist-location-filter'); 
+        let rLoc = document.getElementById('rep-location'); 
+        let rAdm = document.getElementById('rep-admin'); 
+        let dLoc = document.getElementById('data-filter-loc');
+        let dPrize = document.getElementById('data-filter-prize');
+        
+        let prizesSet = new Set();
+        
+        if(hLoc) hLoc.innerHTML = '<option value="">-- Tất cả Địa điểm --</option>';
+        if(rLoc) rLoc.innerHTML = '<option value="">-- Tất cả Địa điểm --</option>';
+        if(dLoc) dLoc.innerHTML = '<option value="">-- Tất cả Trạm --</option>';
+        
+        Object.keys(allData.stations).forEach(l => {
+            if(hLoc) hLoc.innerHTML += `<option value="${l}">${l}</option>`;
+            if(rLoc) rLoc.innerHTML += `<option value="${l}">${l}</option>`;
+            if(dLoc) dLoc.innerHTML += `<option value="${l}">${l}</option>`;
+            if(allData.stations[l].rules) allData.stations[l].rules.forEach(r => prizesSet.add(r.name));
+        }); 
+        
+        if(rAdm) { rAdm.innerHTML = '<option value="">-- Tất cả Nhân viên --</option>'; allData.accounts.forEach(a => rAdm.innerHTML += `<option value="${a.user}">${a.fullName || a.user}</option>`); } 
+        
+        if(dPrize) {
+            dPrize.innerHTML = '<option value="">-- Tất cả Quà --</option><option value="May mắn lần sau">Chưa trúng thưởng</option>';
+            prizesSet.forEach(p => dPrize.innerHTML += `<option value="${p}">${p}</option>`);
+        }
+    };
+
     window.updateLoseRate = function() { let mode = window.getCurrentMode(); let loseRateContainer = document.getElementById('lose-rate-container'); if (mode.includes('percent')) { loseRateContainer.style.display = 'block'; let totalPct = 0; document.querySelectorAll('.p-percent').forEach(el => { totalPct += parseFloat(el.value) || 0; }); let loseRate = 100 - totalPct; if (loseRate < 0) loseRate = 0; document.getElementById('lose-rate-val').innerText = loseRate.toFixed(2); } else { loseRateContainer.style.display = 'none'; } };
     window.balancePercentages = function(changedInput) { let mode = window.getCurrentMode(); if (mode !== 'percent_manual') { window.updateLoseRate(); return; } let allPctInputs = Array.from(document.querySelectorAll('.p-percent')); let totalOthers = 0; allPctInputs.forEach(el => { if (el !== changedInput) totalOthers += (parseFloat(el.value) || 0); }); let maxAllowed = 100 - totalOthers; if (maxAllowed < 0) maxAllowed = 0; let newVal = parseFloat(changedInput.value); if (isNaN(newVal) || newVal < 0) newVal = 0; if (newVal > maxAllowed) { newVal = maxAllowed; changedInput.value = Number.isInteger(newVal) ? newVal : newVal.toFixed(2); } window.updateLoseRate(); };
     window.getCurrentMode = function() { let selectedRadio = document.querySelector('input[name="calcType"]:checked'); if (!selectedRadio) return 'percent_manual'; if (selectedRadio.value === 'percent') return document.getElementById('cfg-mode-percent').value; return document.getElementById('cfg-mode-multiplier').value; };
@@ -314,8 +360,6 @@
             if (currentUser.role === 'super') { let assignedUser = currentUser.user; for (let user in allData.sessions) { if (allData.sessions[user] === locName) { assignedUser = user; break; } } document.getElementById('cfg-assign-admin').value = assignedUser; } 
         } 
     };
-    
-    // GẮN CONVERT LINK DRIVE VÀO CÁC Ô NHẬP ẢNH
     window.renderConfig = function(rules) { let html = ''; let mode = window.getCurrentMode(); let isPctMode = mode.includes('percent'); rules.forEach((rule, i) => { let rawImg = rule.image || 'logotvu.png'; let imgSrc = rawImg.startsWith('http') ? rawImg : 'upload/image/' + rawImg; let rateVal = isPctMode ? (rule.percent || 0) : (rule.mul || 0); html += `<div class="cfg-row prize-row"><input style="flex:1.5" type="text" class="p-name" value="${rule.name}"><div class="upload-area"><img id="prev_${i}" src="${imgSrc}" class="img-preview" onerror="this.src='upload/image/logotvu.png'"><input type="text" class="p-img" value="${rawImg}" placeholder="Dán Link GDrive hoặc Tải lên..." oninput="this.value = window.convertDriveLink(this.value); document.getElementById('prev_${i}').src=this.value"><input type="file" style="display:none" onchange="window.uploadFile(this, ${i})"><button type="button" class="btn btn-info" style="padding:8px 12px; width:auto;" onclick="this.previousElementSibling.click()"><i class="fas fa-upload"></i></button></div><input style="flex:0.8" type="number" class="p-qty" value="${rule.qty}" oninput="window.calculateAuto()"><input style="flex:1; color:#0054a6; font-weight:bold; display:none;" type="number" class="p-mul" value="${rule.mul || 0}"><input style="flex:1; color:#e84393; font-weight:bold; display:block;" type="number" step="any" class="p-percent" value="${rule.percent || 0}" oninput="window.balancePercentages(this)"><button type="button" class="btn btn-danger" style="flex:0.3; width:auto;" onclick="this.parentElement.remove(); window.updateLoseRate();"><i class="fas fa-trash-alt"></i></button></div>`; }); document.getElementById('cfg-prizes').innerHTML = html; window.toggleMode(); };
     window.addPrizeRow = function() { let i = document.querySelectorAll('.prize-row').length; document.getElementById('cfg-prizes').insertAdjacentHTML('beforeend', `<div class="cfg-row prize-row"><input style="flex:1.5" type="text" class="p-name" placeholder="Tên món quà"><div class="upload-area"><img id="prev_${i}" src="upload/image/logotvu.png" class="img-preview"><input type="text" class="p-img" placeholder="Dán Link GDrive hoặc Tải lên..." oninput="this.value = window.convertDriveLink(this.value); document.getElementById('prev_${i}').src=this.value"><input type="file" style="display:none" onchange="window.uploadFile(this, ${i})"><button type="button" class="btn btn-info" style="padding:8px 12px; width:auto;" onclick="this.previousElementSibling.click()"><i class="fas fa-upload"></i></button></div><input style="flex:0.8" type="number" class="p-qty" value="0" oninput="window.calculateAuto()"><input style="flex:1; color:#0054a6; font-weight:bold; display:none;" type="number" class="p-mul" value="0"><input style="flex:1; color:#e84393; font-weight:bold; display:block;" type="number" step="any" class="p-percent" value="0" oninput="window.balancePercentages(this)"><button type="button" class="btn btn-danger" style="flex:0.3; width:auto;" onclick="this.parentElement.remove(); window.updateLoseRate();"><i class="fas fa-trash-alt"></i></button></div>`); window.toggleMode(); };
     
@@ -336,14 +380,23 @@
     
     window.saveInventory = function() { let loc = document.getElementById('cfg-location').value.trim(); if(!loc) return Swal.fire("Lỗi", "Nhập Tên Địa Điểm!", "error"); let assignTo = (currentUser.role === 'super' && document.getElementById('cfg-assign-admin').value) ? document.getElementById('cfg-assign-admin').value : currentUser.user; let mode = window.getCurrentMode(); let rules = []; document.querySelectorAll('.prize-row').forEach(row => { let nElem = row.querySelector('.p-name'); if(nElem && nElem.value.trim() !== "") { rules.push({ name: nElem.value.trim(), image: row.querySelector('.p-img').value.trim() || "", qty: parseInt(row.querySelector('.p-qty').value) || 0, mul: parseInt(row.querySelector('.p-mul').value) || 0, percent: parseFloat(row.querySelector('.p-percent').value) || 0 }); } }); let data = { location: loc, avatar: document.getElementById('cfg-station-avatar').value, expectedStudents: parseInt(document.getElementById('cfg-expected').value)||500, calcMode: mode, rules: rules, counter: (allData.stations[loc] ? allData.stations[loc].counter : 0) }; Swal.fire({title: 'Đang lưu...', allowOutsideClick: false, didOpen: () => Swal.showLoading()}); api({ action: "saveAdmin", data: JSON.stringify(data), adminUser: currentUser.user, assignAdmin: assignTo }, () => location.reload()); };
     
-    window.renderSysConfigUI = function() { let sc = allData.sysConfig; document.getElementById('sys-m1-link').value = sc.m1Link || ""; document.getElementById('sys-m1-text').value = sc.m1Text || ""; document.getElementById('sys-m1-icon').value = sc.m1Icon || "fab fa-facebook"; document.getElementById('sys-m2-link').value = sc.m2Link || ""; document.getElementById('sys-m2-text').value = sc.m2Text || ""; document.getElementById('sys-m2-icon').value = sc.m2Icon || "fab fa-tiktok"; document.getElementById('sys-m3-link').value = sc.m3Link || ""; document.getElementById('sys-m3-text').value = sc.m3Text || ""; document.getElementById('sys-m3-icon').value = sc.m3Icon || "fas fa-share"; document.getElementById('sys-imgbb-key').parentElement.parentElement.style.display = 'none'; /* Ẩn mục nhập API vì dùng free cloud */ let html = ''; if (sc.defaultPrizes) { sc.defaultPrizes.forEach((rule, i) => { let rawImg = rule.image || 'logotvu.png'; let imgSrc = rawImg.startsWith('http') ? rawImg : 'upload/image/' + rawImg; html += `<div class="cfg-row sys-prize-row"><input style="flex:1.5" type="text" class="sp-name" value="${rule.name}"><div class="upload-area"><img id="sprev_${i}" src="${imgSrc}" class="img-preview" onerror="this.src='upload/image/logotvu.png'"><input type="text" class="sp-img" value="${rawImg}" placeholder="Dán Link GDrive hoặc tải lên" oninput="this.value = window.convertDriveLink(this.value); document.getElementById('sprev_${i}').src=this.value"><input type="file" style="display:none" onchange="window.uploadSysFile(this, ${i})"><button type="button" class="btn btn-info" style="padding:8px 12px; width:auto;" onclick="this.previousElementSibling.click()"><i class="fas fa-upload"></i></button></div><button type="button" class="btn btn-danger" style="width:auto;" onclick="this.parentElement.remove()"><i class="fas fa-trash-alt"></i></button></div>`; }); } document.getElementById('sys-default-prizes').innerHTML = html; };
+    window.renderSysConfigUI = function() { let sc = allData.sysConfig; document.getElementById('sys-m1-link').value = sc.m1Link || ""; document.getElementById('sys-m1-text').value = sc.m1Text || ""; document.getElementById('sys-m1-icon').value = sc.m1Icon || "fab fa-facebook"; document.getElementById('sys-m2-link').value = sc.m2Link || ""; document.getElementById('sys-m2-text').value = sc.m2Text || ""; document.getElementById('sys-m2-icon').value = sc.m2Icon || "fab fa-tiktok"; document.getElementById('sys-m3-link').value = sc.m3Link || ""; document.getElementById('sys-m3-text').value = sc.m3Text || ""; document.getElementById('sys-m3-icon').value = sc.m3Icon || "fas fa-share"; document.getElementById('sys-imgbb-key').parentElement.parentElement.style.display = 'none'; let html = ''; if (sc.defaultPrizes) { sc.defaultPrizes.forEach((rule, i) => { let rawImg = rule.image || 'logotvu.png'; let imgSrc = rawImg.startsWith('http') ? rawImg : 'upload/image/' + rawImg; html += `<div class="cfg-row sys-prize-row"><input style="flex:1.5" type="text" class="sp-name" value="${rule.name}"><div class="upload-area"><img id="sprev_${i}" src="${imgSrc}" class="img-preview" onerror="this.src='upload/image/logotvu.png'"><input type="text" class="sp-img" value="${rawImg}" placeholder="Dán Link GDrive hoặc tải lên" oninput="this.value = window.convertDriveLink(this.value); document.getElementById('sprev_${i}').src=this.value"><input type="file" style="display:none" onchange="window.uploadSysFile(this, ${i})"><button type="button" class="btn btn-info" style="padding:8px 12px; width:auto;" onclick="this.previousElementSibling.click()"><i class="fas fa-upload"></i></button></div><button type="button" class="btn btn-danger" style="width:auto;" onclick="this.parentElement.remove()"><i class="fas fa-trash-alt"></i></button></div>`; }); } document.getElementById('sys-default-prizes').innerHTML = html; };
     window.saveSystemConfig = function() { try { let dPrizes = []; document.querySelectorAll('.sys-prize-row').forEach(row => { let nElem = row.querySelector('.sp-name').value.trim(); let imgElem = row.querySelector('.sp-img').value.trim() || 'logotvu.png'; if(nElem) dPrizes.push({name: nElem, image: imgElem, qty: 0, mul: 0, percent: 0}); }); let sysData = { m1Link: document.getElementById('sys-m1-link').value.trim(), m1Text: document.getElementById('sys-m1-text').value.trim(), m1Icon: document.getElementById('sys-m1-icon').value, m2Link: document.getElementById('sys-m2-link').value.trim(), m2Text: document.getElementById('sys-m2-text').value.trim(), m2Icon: document.getElementById('sys-m2-icon').value, m3Link: document.getElementById('sys-m3-link').value.trim(), m3Text: document.getElementById('sys-m3-text').value.trim(), m3Icon: document.getElementById('sys-m3-icon').value, imgbbKey: "", defaultPrizes: dPrizes }; Swal.fire({title: 'Đang lưu...', didOpen: () => Swal.showLoading()}); api({ action: "saveSystemConfig", sysConfigData: JSON.stringify(sysData) }, () => { allData.sysConfig = sysData; Swal.fire("Thành công!", "Đã lưu.", "success"); }); } catch(e) { alert(e.message); } };
     window.addSysPrizeRow = function() { let i = document.querySelectorAll('.sys-prize-row').length; document.getElementById('sys-default-prizes').insertAdjacentHTML('beforeend', `<div class="cfg-row sys-prize-row"><input style="flex:1.5" type="text" class="sp-name" placeholder="Tên món quà"><div class="upload-area"><img id="sprev_${i}" src="upload/image/logotvu.png" class="img-preview"><input type="text" class="sp-img" placeholder="Dán Link GDrive hoặc tải lên" oninput="this.value = window.convertDriveLink(this.value); document.getElementById('sprev_${i}').src=this.value"><input type="file" style="display:none" onchange="window.uploadSysFile(this, ${i})"><button type="button" class="btn btn-info" style="padding:8px 12px; width:auto;" onclick="this.previousElementSibling.click()"><i class="fas fa-upload"></i></button></div><button type="button" class="btn btn-danger" style="width:auto;" onclick="this.parentElement.remove()"><i class="fas fa-trash-alt"></i></button></div>`); };
     window.loadDefaultTemplate = function() { Swal.fire({ title: 'Tải Khuôn Mặc Định?', text: "Sẽ thay thế danh sách quà hiện tại.", icon: 'info', showCancelButton: true, confirmButtonText: 'Đồng ý' }).then((result) => { if (result.isConfirmed) { if(allData.sysConfig && allData.sysConfig.defaultPrizes) { window.renderConfig(allData.sysConfig.defaultPrizes); Swal.fire("Đã tải!", "Vui lòng nhập số lượng và LƯU.", "success"); } else { Swal.fire("Lỗi", "Chưa có cấu hình mặc định.", "error"); } } }); };
     
-    window.addAccountRow = function() { let id = Date.now(); document.getElementById('cfg-accounts-list').insertAdjacentHTML('beforeend', `<div class="cfg-row acc-row"><input style="flex:1.2" type="text" class="a-fn" placeholder="Họ tên thật"><input style="flex:1" type="text" class="a-u" placeholder="Tên đăng nhập"><input style="flex:1" type="text" class="a-p" placeholder="Mật khẩu"><select style="flex:0.8" class="a-r"><option value="admin">Trạm Viên</option><option value="super">Tổng Quản</option></select><div style="flex:1; display:flex; gap:5px; align-items:center;"><img id="av_${id}" src="upload/image/logotvu.png" style="width:30px;height:30px;border-radius:50%;object-fit:cover;"><input type="text" class="a-av" id="in_${id}" placeholder="Dán Link GDrive hoặc Up" oninput="this.value = window.convertDriveLink(this.value); document.getElementById('av_${id}').src=this.value" style="width:50px; font-size:10px;"><input type="file" id="f_${id}" style="display:none;" onchange="window.uploadSingleFile(this, 'in_${id}', 'av_${id}')"><button type="button" class="btn btn-info" style="padding:5px;" onclick="document.getElementById('f_${id}').click()"><i class="fas fa-upload"></i></button></div><button type="button" class="btn btn-danger" style="width:auto;" onclick="this.parentElement.remove()"><i class="fas fa-trash"></i></button></div>`); };
-    window.renderAccounts = function() { let html = ''; allData.accounts.forEach((acc, i) => { let id = Date.now() + i; let av = acc.avatar || "upload/image/logotvu.png"; html += `<div class="cfg-row acc-row"><input style="flex:1.2" type="text" class="a-fn" value="${acc.fullName||''}" placeholder="Họ tên thật"><input style="flex:1" type="text" class="a-u" value="${acc.user}" ${acc.user==='superadmin'?'readonly':''} placeholder="Tên đăng nhập"><input style="flex:1" type="text" class="a-p" value="${acc.pass}" placeholder="Mật khẩu"><select style="flex:0.8" class="a-r"><option value="admin" ${acc.role==='admin'?'selected':''}>Trạm Viên</option><option value="super" ${acc.role==='super'?'selected':''}>Tổng Quản</option></select><div style="flex:1; display:flex; gap:5px; align-items:center;"><img id="av_${id}" src="${av}" style="width:30px;height:30px;border-radius:50%;object-fit:cover;"><input type="text" class="a-av" id="in_${id}" value="${av}" oninput="this.value = window.convertDriveLink(this.value); document.getElementById('av_${id}').src=this.value" placeholder="Dán Link GDrive hoặc Up" style="width:50px; font-size:10px;"><input type="file" id="f_${id}" style="display:none;" onchange="window.uploadSingleFile(this, 'in_${id}', 'av_${id}')"><button type="button" class="btn btn-info" style="padding:5px;" onclick="document.getElementById('f_${id}').click()"><i class="fas fa-upload"></i></button></div>${acc.user==='superadmin'?'':`<button type="button" class="btn btn-danger" style="width:auto;" onclick="this.parentElement.remove()"><i class="fas fa-trash"></i></button>`}</div>`; }); document.getElementById('cfg-accounts-list').innerHTML = html; };
+    window.addAccountRow = function() { let id = Date.now(); document.getElementById('cfg-accounts-list').insertAdjacentHTML('beforeend', `<div class="cfg-row acc-row"><input style="flex:1.2" type="text" class="a-fn" placeholder="Họ tên thật"><input style="flex:1" type="text" class="a-u" placeholder="Tên đăng nhập"><input style="flex:1" type="text" class="a-p" placeholder="Mật khẩu"><select style="flex:0.8" class="a-r"><option value="admin">Trạm Viên</option><option value="super">Tổng Quản</option></select><div style="flex:1; display:flex; gap:5px; align-items:center;"><img id="av_${id}" src="upload/image/logotvu.png" style="width:30px;height:30px;border-radius:50%;object-fit:cover;" onerror="this.src='upload/image/logotvu.png'"><input type="text" class="a-av" id="in_${id}" placeholder="Dán Link GDrive hoặc Up" oninput="this.value = window.convertDriveLink(this.value); document.getElementById('av_${id}').src=this.value" style="width:50px; font-size:10px;"><input type="file" id="f_${id}" style="display:none;" onchange="window.uploadSingleFile(this, 'in_${id}', 'av_${id}')"><button type="button" class="btn btn-info" style="padding:5px;" onclick="document.getElementById('f_${id}').click()"><i class="fas fa-upload"></i></button></div><button type="button" class="btn btn-danger" style="width:auto;" onclick="this.parentElement.remove()"><i class="fas fa-trash"></i></button></div>`); };
+    window.renderAccounts = function() { let html = ''; allData.accounts.forEach((acc, i) => { let id = Date.now() + i; let av = acc.avatar || "upload/image/logotvu.png"; html += `<div class="cfg-row acc-row"><input style="flex:1.2" type="text" class="a-fn" value="${acc.fullName||''}" placeholder="Họ tên thật"><input style="flex:1" type="text" class="a-u" value="${acc.user}" ${acc.user==='superadmin'?'readonly':''} placeholder="Tên đăng nhập"><input style="flex:1" type="text" class="a-p" value="${acc.pass}" placeholder="Mật khẩu"><select style="flex:0.8" class="a-r"><option value="admin" ${acc.role==='admin'?'selected':''}>Trạm Viên</option><option value="super" ${acc.role==='super'?'selected':''}>Tổng Quản</option></select><div style="flex:1; display:flex; gap:5px; align-items:center;"><img id="av_${id}" src="${av}" style="width:30px;height:30px;border-radius:50%;object-fit:cover;" onerror="this.src='upload/image/logotvu.png'"><input type="text" class="a-av" id="in_${id}" value="${av}" oninput="this.value = window.convertDriveLink(this.value); document.getElementById('av_${id}').src=this.value" placeholder="Dán Link GDrive hoặc Up" style="width:50px; font-size:10px;"><input type="file" id="f_${id}" style="display:none;" onchange="window.uploadSingleFile(this, 'in_${id}', 'av_${id}')"><button type="button" class="btn btn-info" style="padding:5px;" onclick="document.getElementById('f_${id}').click()"><i class="fas fa-upload"></i></button></div>${acc.user==='superadmin'?'':`<button type="button" class="btn btn-danger" style="width:auto;" onclick="this.parentElement.remove()"><i class="fas fa-trash"></i></button>`}</div>`; }); document.getElementById('cfg-accounts-list').innerHTML = html; };
     window.saveAccounts = function() { try { let accs = []; document.querySelectorAll('.acc-row').forEach(row => { let uElem = row.querySelector('.a-u'); if (uElem && uElem.value.trim() !== "") { let fn = row.querySelector('.a-fn') ? row.querySelector('.a-fn').value.trim() : ""; let p = row.querySelector('.a-p') ? row.querySelector('.a-p').value.trim() : ""; let r = row.querySelector('.a-r') ? row.querySelector('.a-r').value : "admin"; let av = row.querySelector('.a-av') ? row.querySelector('.a-av').value : ""; accs.push({ fullName: fn, user: uElem.value.trim(), pass: p, role: r, avatar: av }); } }); let hasSuper = false; for(let i=0; i<accs.length; i++) { if(accs[i].user === 'superadmin') hasSuper = true; } if(!hasSuper) { accs.unshift({ user: 'superadmin', pass: 'tvu@2026', role: 'super', fullName: 'Admin Tổng' }); } Swal.fire({title: 'Đang lưu...', didOpen: () => Swal.showLoading()}); api({ action: "saveAdmin", accounts: JSON.stringify(accs) }, () => { Swal.fire("Thành công!", "Đã cập nhật.", "success").then(()=>location.reload()); }); } catch(e) { alert(e.message); } };
+    
+    // TÍNH NĂNG ĐỔI TRẠNG THÁI REAL-TIME UI
+    window.toggleDeliveredUI = function(cb, rowId, histIdx) {
+        let badge = document.getElementById(`badge-${rowId}-${histIdx}`);
+        if(badge) {
+            if(cb.checked) { badge.className = 'badge bg-success status-badge-indicator'; badge.innerText = 'Đã phát'; }
+            else { badge.className = 'badge bg-warning status-badge-indicator'; badge.innerText = 'Chưa phát'; }
+        }
+    };
     
     window.saveWinners = function() { let d = []; document.querySelectorAll('.cb-delivered').forEach(cb => { d.push({row: cb.dataset.row, histIndex: cb.dataset.histidx, delivered: cb.checked}); }); api({ action: "saveWinners", data: JSON.stringify(d) }, () => Swal.fire("Thành công!", "Đã lưu trạng thái phát quà!", "success")); };
     window.closeSession = function() { Swal.fire({title: "Bạn chắc chắn Đóng Ca?", icon: 'warning', showCancelButton: true, confirmButtonColor: '#dc3545', confirmButtonText: "Đóng ca"}).then(r => { if(r.isConfirmed) { let assignElem = document.getElementById('cfg-assign-admin'); let targetAdmin = (assignElem && assignElem.style.display !== 'none' && assignElem.value) ? assignElem.value : currentUser.user; Swal.fire({title: 'Đang chốt sổ...', didOpen: () => Swal.showLoading()}); api({ action: "saveAdmin", closeAdmin: targetAdmin }, () => location.reload()); } }); };
@@ -373,29 +426,83 @@
                 prizeDisplay = `<div style="display:flex; flex-direction:column; gap:5px;">`;
                 wins.forEach((w) => {
                     let originalIdx = row.spinHistory.indexOf(w); let badgeColor = w.delivered ? 'bg-success' : 'bg-warning'; let badgeText = w.delivered ? 'Đã phát' : 'Chưa phát';
-                    prizeDisplay += `<div style="background:#fff5f5; border:1px dashed #dc3545; padding:5px 8px; border-radius:6px; font-size:13px; display:flex; justify-content:space-between; align-items:center;"><span style="color:#e84393; font-weight:bold;">${w.prize} <span class="badge ${badgeColor}" style="font-size:10px; margin-left:5px;">${badgeText}</span></span><label style="cursor:pointer; display:flex; align-items:center; gap:5px; margin:0;"><input type="checkbox" class="cb-delivered" data-row="${row.row}" data-histidx="${originalIdx}" ${w.delivered ? 'checked' : ''}> Phát quà</label></div>`;
+                    prizeDisplay += `<div style="background:#fff5f5; border:1px dashed #dc3545; padding:5px 8px; border-radius:6px; font-size:13px; display:flex; justify-content:space-between; align-items:center;"><span style="color:#e84393; font-weight:bold;">${w.prize} <span class="badge ${badgeColor} status-badge-indicator" id="badge-${row.row}-${originalIdx}" style="font-size:10px; margin-left:5px;">${badgeText}</span></span><label style="cursor:pointer; display:flex; align-items:center; gap:5px; margin:0;"><input type="checkbox" class="cb-delivered" data-row="${row.row}" data-histidx="${originalIdx}" ${w.delivered ? 'checked' : ''} onchange="window.toggleDeliveredUI(this, '${row.row}', '${originalIdx}')"> Phát quà</label></div>`;
                 }); prizeDisplay += `</div>`;
             }
             
             let timeStr = new Date(row.time).toLocaleString('vi-VN'); 
-            html += `<div class="winner-row"><div style="flex:2; display:flex; align-items:center; gap:10px;"><img src="${row.avatar || 'upload/image/logotvu.png'}" style="width:40px;height:40px;border-radius:50%;object-fit:cover;"><div><div style="font-weight:bold; color:#0054a6; font-size:15px;">${row.name}</div><div style="font-size:12px; color:#6c757d;"><i class="fas fa-phone"></i> ${row.phone}</div><div style="font-size:11px; color:#888;"><i class="far fa-clock"></i> ${timeStr} | Trạm: ${row.location}</div></div></div><div style="flex:2;">${prizeDisplay}</div><div style="flex:0.8; text-align:right;">${missionBtn}</div></div>`;
+            html += `<div class="winner-row"><div style="flex:2; display:flex; align-items:center; gap:10px;"><img src="${row.avatar || 'upload/image/logotvu.png'}" onerror="this.src='upload/image/logotvu.png'" style="width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid #e1e8ed;"><div><div style="font-weight:bold; color:#0054a6; font-size:15px;">${row.name}</div><div style="font-size:12px; color:#6c757d;"><i class="fas fa-phone"></i> ${row.phone}</div><div style="font-size:11px; color:#888;"><i class="far fa-clock"></i> ${timeStr} | Trạm: ${row.location}</div></div></div><div style="flex:2;">${prizeDisplay}</div><div style="flex:0.8; text-align:right;">${missionBtn}</div></div>`;
         });
         document.getElementById('hist-list').innerHTML = html || '<div style="text-align:center; padding:20px; color:#999;">Chưa có dữ liệu</div>';
     };
 
-    window.printData = function() { let dataToPrint = allData.history.filter(row => { if(row.isDeleted) return false; if (currentUser.role !== 'super' && row.admin !== currentUser.user) return false; if (!row.prize || row.prize === 'May mắn lần sau' || row.prize === 'Chưa có') return false; return true; }); if(dataToPrint.length === 0) return Swal.fire("Thông báo", "Chưa có dữ liệu in!", "info"); let printWindow = window.open('', '_blank'); let html = `<!DOCTYPE html><html><head><title>Bảng Kê - TVU</title><style>@page { size: A4 landscape; margin: 15mm; } body { font-family: sans-serif; } table { width: 100%; border-collapse: collapse; font-size: 13px; } th { background: #0054a6; color: #fff; padding: 10px; border: 1px solid #000; } td { border: 1px solid #000; padding: 8px; }</style></head><body><h2>BẢNG KÊ PHÁT QUÀ</h2><table><thead><tr><th>STT</th><th>Thời Gian</th><th>SĐT</th><th>Họ Tên</th><th>Trường</th><th>Quà Trúng (Chi tiết)</th><th>Ký Nhận</th></tr></thead><tbody>`; let count = 1; dataToPrint.forEach(row => { let timeStr = row.time ? new Date(row.time).toLocaleString('vi-VN') : ""; html += `<tr><td align="center">${count++}</td><td>${timeStr}</td><td>${row.phone}</td><td>${row.name}</td><td>${row.school}</td><td><b>${row.prize}</b></td><td></td></tr>`; }); html += `</tbody></table></body></html>`; printWindow.document.write(html); printWindow.document.close(); setTimeout(() => { printWindow.print(); }, 500); };
-    window.exportCSV = function() { let csv = "data:text/csv;charset=utf-8,\uFEFFHàng,Thời Gian,Số Điện Thoại,Họ Tên,Email,Trường,Địa Điểm,Nhân Viên Trực,Quà Trúng,Trạng Thái\n"; allData.history.forEach(row => { if(row.isDeleted) return; if (currentUser.role !== 'super' && row.admin !== currentUser.user) return; let hasWon = (row.prize && row.prize !== 'May mắn lần sau' && row.prize !== 'Chưa có'); let status = row.delivered ? "Đã trao hết" : (hasWon ? "Chưa trao hết" : "-"); let timeStr = row.time ? new Date(row.time).toLocaleString('vi-VN') : ""; let pText = row.prize === 'May mắn lần sau' ? 'Chưa trúng thưởng' : row.prize; csv += `"${row.row}","${timeStr}","'${row.phone}","${row.name}","${row.email || ''}","${row.school}","${row.location}","${row.admin}","${pText}","${status}"\n`; }); const link = document.createElement("a"); link.setAttribute("href", encodeURI(csv)); link.setAttribute("download", "DanhSach_VongQuay.csv"); document.body.appendChild(link); link.click(); document.body.removeChild(link); };
+    // HÀM LẤY DỮ LIỆU ĐÃ QUA BỘ LỌC ĐỂ IN VÀ XUẤT EXCEL
+    window.getFilteredRawData = function() {
+        let dDate = document.getElementById('data-filter-date').value;
+        let dLoc = document.getElementById('data-filter-loc').value;
+        let dPrize = document.getElementById('data-filter-prize').value;
+        let dStatus = document.getElementById('data-filter-status').value;
+        let showTrash = document.getElementById('show-trash-cb').checked;
+
+        return allData.history.filter(w => {
+            if (!showTrash && w.isDeleted) return false; if (showTrash && !w.isDeleted) return false; 
+            if (currentUser.role !== 'super' && w.admin !== currentUser.user) return false; 
+            
+            let wDate = w.time ? new Date(w.time).toISOString().split('T')[0] : "";
+            if (dDate && wDate !== dDate) return false;
+            if (dLoc && w.location !== dLoc) return false;
+            
+            let hasWon = (w.prize && w.prize !== 'May mắn lần sau' && w.prize !== 'Chưa có');
+            if (dStatus === 'win' && !hasWon) return false;
+            if (dStatus === 'lose' && hasWon) return false;
+            
+            if (dPrize) {
+                if (dPrize === 'May mắn lần sau') { if (hasWon) return false; } 
+                else { if (!w.prize || !w.prize.includes(dPrize)) return false; }
+            }
+            return true;
+        });
+    };
+
+    window.printData = function() { 
+        let dataToPrint = window.getFilteredRawData();
+        if(dataToPrint.length === 0) return Swal.fire("Thông báo", "Chưa có dữ liệu nào khớp với bộ lọc để in!", "info"); 
+        let printWindow = window.open('', '_blank'); 
+        let html = `<!DOCTYPE html><html><head><title>Bảng Kê Danh Sách - TVU</title><style>@page { size: A4 landscape; margin: 15mm; } body { font-family: sans-serif; } table { width: 100%; border-collapse: collapse; font-size: 13px; } th { background: #0054a6; color: #fff; padding: 10px; border: 1px solid #000; } td { border: 1px solid #000; padding: 8px; }</style></head><body><h2>BẢNG KÊ DANH SÁCH THAM GIA</h2><table><thead><tr><th>STT</th><th>Thời Gian</th><th>SĐT</th><th>Họ Tên</th><th>Trường</th><th>Quà Trúng (Chi tiết)</th><th>Ký Nhận</th></tr></thead><tbody>`; 
+        let count = 1; dataToPrint.forEach(row => { 
+            let timeStr = row.time ? new Date(row.time).toLocaleString('vi-VN') : ""; 
+            let pText = row.prize === 'May mắn lần sau' ? 'Chưa trúng thưởng' : row.prize;
+            html += `<tr><td align="center">${count++}</td><td>${timeStr}</td><td>${row.phone}</td><td>${row.name}</td><td>${row.school}</td><td><b>${pText}</b></td><td></td></tr>`; 
+        }); 
+        html += `</tbody></table></body></html>`; printWindow.document.write(html); printWindow.document.close(); setTimeout(() => { printWindow.print(); }, 500); 
+    };
+
+    window.exportCSV = function() { 
+        let dataToExport = window.getFilteredRawData();
+        let csv = "data:text/csv;charset=utf-8,\uFEFFHàng,Thời Gian,Số Điện Thoại,Họ Tên,Email,Trường,Địa Điểm,Nhân Viên Trực,Quà Trúng,Trạng Thái\n"; 
+        dataToExport.forEach(row => { 
+            let hasWon = (row.prize && row.prize !== 'May mắn lần sau' && row.prize !== 'Chưa có'); 
+            let status = row.delivered ? "Đã trao hết" : (hasWon ? "Chưa trao hết" : "-"); 
+            let timeStr = row.time ? new Date(row.time).toLocaleString('vi-VN') : ""; 
+            let pText = row.prize === 'May mắn lần sau' ? 'Chưa trúng thưởng' : row.prize; 
+            csv += `"${row.row}","${timeStr}","'${row.phone}","${row.name}","${row.email || ''}","${row.school}","${row.location}","${row.admin}","${pText}","${status}"\n`; 
+        }); 
+        const link = document.createElement("a"); link.setAttribute("href", encodeURI(csv)); link.setAttribute("download", "DanhSach_VongQuay_DaLoc.csv"); document.body.appendChild(link); link.click(); document.body.removeChild(link); 
+    };
+
     window.generateReport = function() { let l = document.getElementById('rep-location').value, a = document.getElementById('rep-admin').value, d = document.getElementById('rep-date').value; let tWin = 0, tGiven = 0; let allTimeWonCount = {}; allData.history.forEach(w => { if(w.isDeleted) return; if(w.prize && w.prize !== "May mắn lần sau" && w.prize !== "Chưa có") { let wins = w.spinHistory ? w.spinHistory.filter(h => h.prize && h.prize !== 'May mắn lần sau' && h.prize !== 'Chưa có') : []; wins.forEach(h => { let k = w.location + '|||' + h.prize; allTimeWonCount[k] = (allTimeWonCount[k] || 0) + 1; }); } }); let statsMap = {}; for (let loc in allData.stations) { let st = allData.stations[loc]; if (st && st.isClosed === true) { if (l && loc !== l) continue; let adminUser = st.closedBy || st.admin; if (!adminUser) { let hRow = allData.history.find(w => w.location === loc); if (hRow) adminUser = hRow.admin; } adminUser = adminUser || "Không rõ"; let accInfo = allData.accounts.find(acc => acc.user === adminUser); let adminFullName = accInfo ? (accInfo.fullName || adminUser) : adminUser; if (st.rules) { st.rules.forEach(r => { let k = loc + '|||' + r.name; statsMap[k] = { loc: loc, admin: adminFullName, name: r.name, ton: parseInt(r.qty)||0, tongDemDi: (parseInt(r.qty)||0) + (allTimeWonCount[k] || 0), daTrung: 0, daGiao: 0 }; }); } } } allData.history.forEach(w => { if(w.isDeleted) return; if (currentUser.role !== 'super' && w.admin !== currentUser.user) return; let st = allData.stations[w.location]; if (!st || st.isClosed !== true) return; let date = w.time ? new Date(w.time).toISOString().split('T')[0] : ""; if ((!l || w.location === l) && (!a || w.admin === a) && (!d || date === d)) { let wins = w.spinHistory ? w.spinHistory.filter(h => h.prize && h.prize !== 'May mắn lần sau' && h.prize !== 'Chưa có') : []; wins.forEach(h => { tWin++; if(h.delivered) tGiven++; let k = w.location + '|||' + h.prize; if(statsMap[k]) { statsMap[k].daTrung++; if(h.delivered) statsMap[k].daGiao++; } }); } }); document.getElementById('rep-total').innerText = tWin; document.getElementById('rep-given').innerText = tGiven; document.getElementById('rep-not-given').innerText = tWin - tGiven; let htmlDetail = ''; for (let key in statsMap) { let item = statsMap[key]; if (item.tongDemDi > 0 || item.daTrung > 0) { htmlDetail += `<tr><td><b>${item.loc}</b></td><td><span style="color:#e84393; font-weight:bold;">${item.admin}</span></td><td><span class="badge bg-info">${item.name}</span></td><td style="font-weight:bold;">${item.tongDemDi}</td><td><span class="badge bg-warning">${item.daTrung}</span></td><td><span class="badge bg-success">${item.daGiao}</span></td><td><span class="badge bg-secondary">${item.ton}</span></td></tr>`; } } document.getElementById('report-detail-tbody').innerHTML = htmlDetail || '<tr><td colspan="7" style="text-align:center;">Trạm chưa chốt sổ.</td></tr>'; };
     
-    // RENDER DS HS VỚI THÙNG RÁC & AVATAR
+    // RENDER DS HS (SỬ DỤNG BỘ LỌC)
     window.renderRawData = function() { 
-        let html = ''; let showTrash = document.getElementById('show-trash-cb').checked;
-        allData.history.forEach((w, index) => { 
-            if (!showTrash && w.isDeleted) return; if (showTrash && !w.isDeleted) return; 
-            if (currentUser.role !== 'super' && w.admin !== currentUser.user) return; 
-            
-            let st = allData.stations[w.location]; let isClosedText = (st && st.isClosed) ? '<i class="fas fa-lock" style="color:red;" title="Đã Chốt"></i> ' : '<i class="fas fa-spinner fa-spin" style="color:green;" title="Đang chạy"></i> '; let statusBadge = w.delivered ? '<span class="badge bg-success">Đã Trao</span>' : (w.prize !== 'May mắn lần sau' && w.prize !== 'Chưa có' ? '<span class="badge bg-warning">Chưa Trao Hết</span>' : '<span class="badge bg-secondary">-</span>'); let pText = w.prize === 'May mắn lần sau' ? 'Chưa trúng thưởng' : w.prize; let timeStr = new Date(w.time).toLocaleString('vi-VN'); 
-            let av = `<img src="${w.avatar || 'upload/image/logotvu.png'}" style="width:30px;height:30px;border-radius:50%;object-fit:cover;">`;
+        let html = ''; 
+        let filteredData = window.getFilteredRawData();
+        
+        filteredData.forEach((w, index) => { 
+            let st = allData.stations[w.location]; let isClosedText = (st && st.isClosed) ? '<i class="fas fa-lock" style="color:red;" title="Đã Chốt"></i> ' : '<i class="fas fa-spinner fa-spin" style="color:green;" title="Đang chạy"></i> '; 
+            let hasWon = (w.prize && w.prize !== 'May mắn lần sau' && w.prize !== 'Chưa có');
+            let statusBadge = w.delivered ? '<span class="badge bg-success">Đã Trao</span>' : (hasWon ? '<span class="badge bg-warning">Chưa Trao Hết</span>' : '<span class="badge bg-secondary">-</span>'); 
+            let pText = w.prize === 'May mắn lần sau' ? 'Chưa trúng thưởng' : w.prize; let timeStr = new Date(w.time).toLocaleString('vi-VN'); 
+            let av = `<img src="${w.avatar || 'upload/image/logotvu.png'}" onerror="this.src='upload/image/logotvu.png'" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:1px solid #ced4da;">`;
             let actionBtn = w.isDeleted ? `<button class="btn btn-success" style="padding:4px 8px;font-size:11px;" onclick="window.restoreRow(${w.row})"><i class="fas fa-undo"></i></button>` : `<button class="btn btn-danger" style="padding:4px 8px;font-size:11px;" onclick="window.softDelete(${w.row})"><i class="fas fa-trash"></i></button>`;
             
             html += `<tr class="${w.isDeleted ? 'deleted' : ''}"><td>${w.row}</td><td>${timeStr}</td><td>${w.phone}</td><td style="display:flex;align-items:center;gap:5px;">${av} <b>${w.name}</b></td><td>${w.email || ''}</td><td>${w.school}</td><td><span style="color:#0054a6; font-weight:bold; font-size:12px;">${pText}</span></td><td>${statusBadge}</td><td>${isClosedText} ${w.location}</td><td>${currentUser.role === 'super' ? actionBtn : ''}</td></tr>`; 
