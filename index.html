@@ -26,10 +26,7 @@
         .btn-spin { background: linear-gradient(135deg, #007bff, #0056b3); color: white; border: none; padding: 15px; width: 100%; border-radius: 12px; font-weight: 800; cursor: pointer; font-size: 18px; transition: all 0.3s; margin-top: 15px; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4); display: flex; align-items: center; justify-content: center; gap: 10px; white-space: nowrap; }
         .btn-spin i { font-size: 20px; }
         .btn-spin:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0, 123, 255, 0.6); }
-        
-        /* CSS Nút Disable - Chuyển sang xám xịt */
         .btn-spin:disabled, #spin-btn:disabled { background: #bdc3c7 !important; color: #7f8c8d !important; cursor: not-allowed !important; box-shadow: none !important; transform: none !important; border: 1px solid #95a5a6 !important; }
-        
         #spin-btn { background: linear-gradient(135deg, #11998e, #38ef7d); box-shadow: 0 5px 15px rgba(56,239,125,0.4); }
         #spin-btn:hover { box-shadow: 0 8px 20px rgba(56,239,125,0.6); }
         .btn-exit-small { position: absolute; top: 15px; right: 15px; background: #ffebee; color: #dc3545; border: 1px solid #ffc107; padding: 6px 12px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 13px; z-index: 100; transition: 0.3s;}
@@ -45,6 +42,8 @@
         .history-prize { font-weight: 800; text-align: right;}
         .mission-box { background: linear-gradient(135deg, #8e2de2, #4a00e0); color: white; padding: 12px; border-radius: 10px; margin: 10px 0; display: none; cursor: pointer; box-shadow: 0 5px 15px rgba(142,45,226,0.4); animation: pulse 2s infinite;}
         .mission-box:hover { transform: scale(1.02); }
+        .mission-disabled { background: #bdc3c7; box-shadow: none; animation: none; cursor: not-allowed; color: #555; }
+        .mission-disabled:hover { transform: none; }
         @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(142,45,226,0.7); } 70% { box-shadow: 0 0 0 10px rgba(142,45,226,0); } 100% { box-shadow: 0 0 0 0 rgba(142,45,226,0); } }
         #wheel-wrapper { position: relative; width: 280px; height: 280px; margin: 15px auto; }
         canvas { width: 100%; height: 100%; border-radius: 50%; box-sizing: border-box; }
@@ -236,13 +235,28 @@
         try { mData = typeof user.mission === 'string' ? JSON.parse(user.mission) : user.mission; } catch(e) { if(user.mission === 'pending') mData = {granted: 1, completed: 0}; }
         if(!mData) mData = {granted: 0, completed: 0};
 
-        if (!hasWon && mData.granted > mData.completed && window.sysConfig) {
-            let nextNum = mData.completed + 1; currentMissionLink = window.sysConfig[`m${nextNum}Link`];
-            document.getElementById('mission-icon-display').className = window.sysConfig[`m${nextNum}Icon`];
-            document.getElementById('mission-title-display').innerText = `NHIỆM VỤ ${nextNum}/${mData.granted} ĐỂ NHẬN LƯỢT`;
-            document.getElementById('mission-text-display').innerText = "(" + window.sysConfig[`m${nextNum}Text`] + ")";
-            document.getElementById('mission-box').style.display = 'block';
-        } else { document.getElementById('mission-box').style.display = 'none'; }
+        if (!hasWon) {
+            if (mData.granted > mData.completed && window.sysConfig) {
+                let nextNum = mData.completed + 1; currentMissionLink = window.sysConfig[`m${nextNum}Link`];
+                document.getElementById('mission-box').className = 'mission-box';
+                document.getElementById('mission-box').onclick = doMission;
+                document.getElementById('mission-icon-display').className = window.sysConfig[`m${nextNum}Icon`];
+                document.getElementById('mission-title-display').innerText = `NHIỆM VỤ ${nextNum}/${mData.granted} ĐỂ NHẬN LƯỢT`;
+                document.getElementById('mission-text-display').innerText = "(" + window.sysConfig[`m${nextNum}Text`] + ")";
+                document.getElementById('mission-box').style.display = 'block';
+            } else if (mData.completed >= 3) {
+                document.getElementById('mission-box').style.display = 'block';
+                document.getElementById('mission-box').className = 'mission-box mission-disabled';
+                document.getElementById('mission-box').onclick = null;
+                document.getElementById('mission-icon-display').className = 'fas fa-ban';
+                document.getElementById('mission-title-display').innerText = `ĐÃ HẾT NHIỆM VỤ`;
+                document.getElementById('mission-text-display').innerText = "(Bạn đã hoàn thành toàn bộ 3 nhiệm vụ)";
+            } else {
+                document.getElementById('mission-box').style.display = 'none';
+            }
+        } else {
+            document.getElementById('mission-box').style.display = 'none';
+        }
 
         let histHtml = '';
         if (user.spinHistory && user.spinHistory.length > 0) {
